@@ -1,0 +1,3 @@
+#
+class Status < ConfigPrototipo
+end

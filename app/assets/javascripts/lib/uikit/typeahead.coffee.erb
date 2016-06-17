@@ -1,0 +1,528 @@
+# /*
+#   // html
+#   <input ng-model="busca"
+#     typeahead="pasta as pasta.nome for pasta in busquePastas($viewValue)"
+#     typeahead-min-length="2"
+#     typeahead-on-select="selectCallback($model, $label, $item)"
+#     typeahead-wait-ms="500" />
+
+#   // ctrl
+#   $scope.busquePastas = (query)->
+#     $http({
+#       method: 'GET'
+#       responseType: 'json'
+#       url: '/.../...'
+#       params: {query: query}
+#     }).then (response)->
+#       response.data.lista
+# */
+angular.module 'sc.commons.components.typeahead', ['sc.commons.factories.position']
+
+.factory 'typeaheadParser', [
+  '$parse'
+  ($parse)->
+    TYPEAHEAD_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+([\s\S]+?)$/
+    # pasta as pasta.nome group by pasta.tipo for pasta in pesquisarPastas()
+    # modelMapper - 1: pasta || pasta.nome (pasta.nome quando não informa o _"as"_)
+    # viewMapper  - 2: pasta.nome
+    # groupMapper - 3: pasta.tipo
+    # itemName    - 4: pasta
+    # source      - 5: pesquisarPastas()
+
+    parse: (input)->
+      match = input.match(TYPEAHEAD_REGEXP)
+      throw new Error "Expected typeahead specification in form of \"_modelValue_ (as _label_)? for _item_ in _collection_\" but got \"#{input}\"." if !match
+
+      itemName: match[4]
+      source: $parse(match[5])
+      groupMapper: match[3] && $parse(match[3])
+      viewMapper: $parse(match[2] || match[1])
+      modelMapper: $parse(match[1])
+]
+
+.directive 'typeahead', [
+  '$compile'
+  '$parse'
+  '$q'
+  '$timeout'
+  '$document'
+  '$position'
+  'typeaheadParser'
+  ($compile, $parse, $q, $timeout, $document, $position, typeaheadParser)->
+    HOT_KEYS = [8, 9, 13, 27, 38, 40]
+    require:'ngModel'
+    priority: 99
+    link: (originalScope, element, attrs, modelCtrl)->
+      # CONFIG OPTIONS
+      # to select more than one value of the search results
+      multipleValues = originalScope.$eval(attrs.typeaheadMultiple) || false
+
+      # minimal no of characters that needs to be entered before typeahead kicks-in
+      minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1
+
+      # minimal wait time after last character typed before typehead kicks-in
+      waitTime = originalScope.$eval(attrs.typeaheadWaitMs) || 0
+
+      # should it restrict model values to the ones selected from the popup only?
+      isEditable = if attrs.typeaheadEditable == undefined then false else (originalScope.$eval(attrs.typeaheadEditable) != false)
+      isCombo = !!originalScope.$eval(attrs.typeaheadCombo)
+
+      # binding to a variable that indicates if matches are being retrieved asynchronously
+      isLoadingSetter = $parse(attrs.typeaheadLoading).assign || angular.noop
+
+      # a callback executed when a match is selected
+      onSelectCallback = $parse(attrs.typeaheadOnSelect)
+      onBackspaceCallback = $parse(attrs.typeaheadOnBackspace) || angular.noop
+
+      # inputFormatter = if attrs.typeaheadInputFormatter then $parse(attrs.typeaheadInputFormatter) else undefined;
+      inputFormatter = undefined
+
+      # appendToBody =  if attrs.typeaheadAppendToBody then originalScope.$eval(attrs.typeaheadAppendToBody) else false;
+      appendToBody = true
+
+      noRecordText = if attrs.typeaheadNoRecordText then attrs.typeaheadNoRecordText else "Nenhum resultado encontrado"
+
+      # INTERNAL VARIABLES
+      # model setter executed upon match selection
+      $setModelValue = $parse(attrs.ngModel).assign
+
+      # expressions used by typeahead
+      parserResult = typeaheadParser.parse(attrs.typeahead)
+      isGrouped = !!parserResult.groupMapper
+
+      hasFocus = undefined
+
+      # create a child scope for the typeahead directive so we are not polluting original scope
+      # with typeahead-specific data (matches, query etc.)
+      scope = originalScope.$new()
+      originalScope.$on '$destroy', ->
+        $popup.remove()
+        scope.$destroy()
+
+
+      element.addClass if isCombo then 'typeahead-combo' else 'typeahead-search'
+
+      # WAI-ARIA
+      popupId = "typeahead-#{scope.$id}-#{Math.floor(Math.random() * 10000)}"
+      element.attr
+        "aria-autocomplete": 'list'
+        "aria-expanded": false
+        "aria-owns": popupId
+
+      # pop-up element used to display matches
+      popUpEl = angular.element '<div typeahead-popup></div>'
+      popUpEl.attr
+        id: popupId
+        matches: 'matches'
+        groups: 'groups'
+        active: 'activeIdx'
+        select: 'select(activeIdx)'
+        query: 'query'
+        position: 'position'
+
+      # custom item template
+      popUpEl.attr('template-url', attrs.typeaheadTemplateUrl) if angular.isDefined(attrs.typeaheadTemplateUrl)
+
+      removeMatches = ->
+        scope.matches = []
+        scope.activeIdx = -1
+        element.attr 'aria-expanded', false
+
+      resetMatches = (noReset=false)->
+        unless noReset
+          removeMatches()
+          # limpa o campo caso o model não esteja preechido
+          unless $parse(attrs.ngModel)(scope)
+            element.val ''
+            modelCtrl.$setViewValue(undefined)
+
+      noRecordsFound = ->
+        removeMatches()
+        unless isEditable
+          scope.matches.push
+            model: undefined
+            label: noRecordText
+            type: 'no-records'
+
+          scope.groups = '':[0] if isGrouped
+
+          scope.activeIdx = 0
+          element.attr 'aria-expanded', true
+
+      getMatchId = (index)->
+        "#{popupId}-option-#{index}"
+
+      openCombo = ->
+        hasFocus = true
+        modelCtrl.$openCombo = true
+        # modelCtrl.$setViewValue(modelCtrl.$viewValue) #manter busca anterior
+        modelCtrl.$setViewValue(undefined) # limpando a busca anterior
+
+
+      relocate = ->
+        # position pop-up with matches - we need to re-calculate its position each time we are opening a window
+        # with matches as a pop-up might be absolute-positioned and position of an input might have changed on a page
+        # due to other elements being rendered
+        scope.position = if appendToBody then $position.offset(element) else $position.position(element)
+        scope.position.top = scope.position.top + element.prop('offsetHeight')
+        scope.position.width = element.prop('offsetWidth')
+        return
+
+      # Indicate that the specified match is the active (pre-selected) item in the list owned by this typeahead.
+      # This attribute is added or removed automatically when the `activeIdx` changes.
+      scope.$watch 'activeIdx', (index)->
+        if index < 0
+          element.removeAttr('aria-activedescendant')
+        else
+          element.attr 'aria-activedescendant', getMatchId(index)
+
+      getMatchesAsync = (inputValue)->
+        locals = $viewValue: inputValue
+
+        isLoadingSetter originalScope, true
+        $q.when(parserResult.source(originalScope, locals)).then (matches)->
+          # it might happen that several async queries were in progress if a user were typing fast
+          # but we are interested only in responses that correspond to the current view value
+          onCurrentRequest = (inputValue == modelCtrl.$viewValue)
+          if onCurrentRequest && hasFocus
+            addSuggestion = (isEditable && inputValue)
+
+            items = matches.map (match)->
+              locals[parserResult.itemName] = match
+              label = parserResult.viewMapper(scope, locals)
+              group = parserResult.groupMapper(scope, locals) if isGrouped
+
+              addSuggestion = false if addSuggestion && "#{label}".toUpperCase() == "#{inputValue}".toUpperCase()
+
+              ret =
+                label: label
+                model: match
+
+              if isGrouped
+                ret.group       = group
+                ret.group_label = group || '' #implementar opção para label do grupo
+
+              ret
+
+            items.unshift label:inputValue, model:inputValue, group_label:'', type:'new-record' if addSuggestion
+
+            if isGrouped
+              scope.groups = {}
+              items = items.sort((a,b)-> if a.group_label > b.group_label then 1 else -1)
+
+            if items.length > 0
+              scope.activeIdx = 0
+              # scope.activeIdx += 1 if addSuggestion && items.length > 1
+              scope.matches.length = 0
+
+              # transform labels
+              for item, idx in items
+                item.id = getMatchId(idx)
+                scope.matches.push item
+                if isGrouped
+                  scope.groups[item.group_label] ||= []
+                  scope.groups[item.group_label].push idx
+
+              scope.query = inputValue;
+
+              ensureVisibility(scope.activeIdx)
+
+              element.attr('aria-expanded', true)
+            else
+              noRecordsFound()
+
+            $timeout relocate, 0
+
+          isLoadingSetter(originalScope, false) if onCurrentRequest
+          return
+        , ->
+          resetMatches()
+          isLoadingSetter(originalScope, false)
+          return
+
+      resetMatches()
+
+      # we need to propagate user's query so we can highlight matches
+      scope.query = undefined
+
+      # Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later
+      timeoutPromise = undefined
+
+      scheduleSearchWithTimeout = (inputValue)->
+        timeoutPromise = $timeout ->
+          getMatchesAsync(inputValue)
+        , waitTime
+        return
+
+      cancelPreviousTimeout = ->
+        $timeout.cancel(timeoutPromise) if timeoutPromise
+        return
+
+      # plug into $parsers pipeline to open a typeahead on view changes initiated from DOM
+      # $parsers kick-in on all the changes coming from the view as well as manually triggered by $setViewValue
+      modelCtrl.$parsers.unshift (inputValue)->
+        hasFocus = true
+
+        if modelCtrl.$openCombo
+          modelCtrl.$openCombo = false
+          cancelPreviousTimeout()
+          getMatchesAsync(modelCtrl.$viewValue)
+          return scope.$eval(attrs.ngModel) || inputValue
+        else if inputValue && inputValue.length >= minSearch
+          if waitTime > 0
+            cancelPreviousTimeout()
+            scheduleSearchWithTimeout(inputValue)
+          else
+            getMatchesAsync(inputValue)
+        else if isCombo && scope.matches.length > 0
+          scheduleSearchWithTimeout(inputValue)
+        else
+          isLoadingSetter(originalScope, false)
+          cancelPreviousTimeout()
+          resetMatches()
+
+        return if isEditable
+          inputValue
+        else
+          modelCtrl.$setValidity('editable', !inputValue)
+          null
+
+      modelCtrl.$formatters.push (modelValue)->
+
+        candidateViewValue = emptyViewValue = undefined
+        locals = {}
+
+        if inputFormatter
+          locals['$model'] = modelValue
+          inputFormatter(originalScope, locals)
+        else
+          # it might happen that we don't have enough info to properly render input value
+          # we need to check for this situation and simply return model value if we can't apply custom formatting
+          locals[parserResult.itemName] = modelValue;
+          candidateViewValue = parserResult.viewMapper(originalScope, locals);
+          locals[parserResult.itemName] = undefined;
+          emptyViewValue = parserResult.viewMapper(originalScope, locals);
+
+          if candidateViewValue != emptyViewValue
+            candidateViewValue
+          else
+            modelValue
+
+      scope.select = (activeIdx)->
+        # called from within the $digest() cycle
+        model = item = undefined
+        locals = {}
+
+        item = scope.matches[activeIdx]
+        locals[parserResult.itemName] = scope.matches[activeIdx].model
+        model = parserResult.modelMapper(originalScope, locals)
+
+        if isEditable && !model
+          label = model = item.label
+        else
+          label = parserResult.viewMapper(originalScope, locals)
+
+        $setModelValue(originalScope, model)
+        modelCtrl.$setValidity('editable', true)
+
+        onSelectCallback originalScope,
+          $item: item
+          $model: model
+          $label: label
+
+        resetMatches(multipleValues)
+
+        # return focus to the input element if a match was selected via a mouse click event
+        # use timeout to avoid $rootScope:inprog error
+        $timeout ->
+          element[0].focus()
+        , 0, false
+
+        return
+
+      scope.triggerBackspace = ->
+        scope.$apply ->
+          onBackspaceCallback originalScope, $viewValue: if modelCtrl.$viewValue? then modelCtrl.$viewValue else undefined
+          $timeout relocate, 0
+
+      scope.keyboardNav = false
+
+      releaseKeyboardNavPromisse = undefined
+
+      ensureVisibility = (activeIdx)->
+        $timeout.cancel(releaseKeyboardNavPromisse) if releaseKeyboardNavPromisse
+
+        callbackFn = ->
+          releaseKeyboardNavPromisse = $timeout ->
+            scope.keyboardNav = false
+            return
+          , 100
+          return
+
+        top = angular.element("##{scope.matches[activeIdx].id}").prop('offsetTop') - 5
+
+        popUpEl.scrollTo top, callbackFn
+
+      # bind keyboard events: arrows up(38) / down(40), enter(13) and tab(9), esc(27), backspace(8)
+      element.bind 'keydown', (evt)->
+        return if HOT_KEYS.indexOf(evt.which) == -1
+
+        hasMatches = scope.matches.length > 0
+
+        if evt.which == 8
+          scope.triggerBackspace()
+        else if hasMatches
+          evt.preventDefault()
+
+          if evt.which == 40
+            scope.keyboardNav = true
+            scope.activeIdx = (scope.activeIdx + 1) % scope.matches.length
+            ensureVisibility(scope.activeIdx)
+            scope.$digest()
+          else if evt.which == 38
+            scope.keyboardNav = true
+            scope.activeIdx = (if scope.activeIdx then scope.activeIdx else scope.matches.length) - 1
+            ensureVisibility(scope.activeIdx)
+            scope.$digest()
+          else if evt.which == 13
+            evt.stopPropagation()
+            scope.$apply ->
+              scope.select scope.activeIdx
+              return
+          else if evt.which == 27 || evt.which == 9 # 9 é tab
+            evt.stopPropagation()
+            resetMatches()
+            scope.$digest()
+        else if isCombo && (evt.which == 40 || evt.which == 38)
+          openCombo()
+          getMatchesAsync(modelCtrl.$viewValue)
+
+        return
+
+      element.bind 'blur', (evt)->
+        if !modelCtrl.$modelValue? && scope.matches.length == 0
+          modelCtrl.$setViewValue(undefined)
+          resetMatches()
+        hasFocus = false
+        return
+
+      element.bind 'click', (evt)->
+        if isCombo
+          hasFocus = undefined
+
+          if scope.matches.length > 0
+            hasFocus = false
+            resetMatches()
+          else
+            openCombo()
+            getMatchesAsync(modelCtrl.$viewValue)
+
+
+          evt.stopPropagation();
+          scope.$digest()
+
+      # Keep reference to click handler to unbind it.
+      dismissClickHandler = (evt)->
+        if !element.isParentOf evt.target
+          element[0].blur()
+          hasFocus = false
+          if scope.matches.length > 0
+            resetMatches()
+            scope.$digest()
+
+      windowResizeHandler = ->
+        relocate()
+        scope.$digest()
+
+      $(window).resize windowResizeHandler
+
+      $document.bind 'click', dismissClickHandler
+
+      originalScope.$on '$destroy', ->
+        $(window).unbind 'resize', windowResizeHandler
+        $document.unbind 'click', dismissClickHandler
+
+      $popup = $compile(popUpEl)(scope)
+
+      if appendToBody
+        $document.find('body').append($popup);
+      else
+        element.after($popup);
+
+      return
+]
+
+.directive 'typeaheadPreventScroll', ['$position', ($position)->
+    restrict: 'EA'
+    link: (scope, element, attrs, $document)->
+      # 'DOMMouseScroll', 'mousewheel'
+      element.bind 'DOMMouseScroll mousewheel', (e)->
+        e0 = e.originalEvent
+        delta = e0.wheelDelta || -e0.detail
+        multiplier = if delta < 0 then 1 else -1
+
+        newValue = element.scrollTop() + multiplier * 40
+
+        element.scrollTop(newValue)
+        e.preventDefault()
+]
+
+.directive 'typeaheadPopup', ->
+  restrict: 'EA'
+  scope:
+    matches: '='
+    groups: '='
+    query: '='
+    active: '='
+    position: '='
+    select: '&'
+  replace: true
+  # template: '<ul typeahead-prevent-scroll class="dropdown-menu" ng-if="isOpen()" ng-style="{top: position.top+\'px\', left: position.left+\'px\', width: position.width+\'px\'}" style="display: block;" role="listbox" aria-hidden="{{!isOpen()}}"><li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-class-even="\'even\'" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index);$event.stopPropagation();" role="option" id="{{match.id}}"><div typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div></li></ul>',
+  templateUrl: "<%= asset_path('typeahead/list.html')%>",
+  link: (scope, element, attrs)->
+    scope.templateUrl = attrs.templateUrl
+
+    scope.isOpen = ->
+      scope.matches.length > 0
+
+    scope.isActive = (matchIdx)->
+      scope.active == matchIdx
+
+    scope.selectActive = (matchIdx)->
+      scope.active = matchIdx unless scope.$parent.keyboardNav
+      return
+
+    scope.selectMatch = (activeIdx)->
+      scope.select {activeIdx:activeIdx}
+      return
+
+    return
+
+.directive 'typeaheadMatch', [
+  '$http'
+  '$templateCache'
+  '$compile'
+  '$parse'
+  ($http, $templateCache, $compile, $parse)->
+    restrict:'EA'
+    scope:
+      index:'='
+      match:'='
+      query:'='
+    link: (scope, element, attrs)->
+      tplContentUrl = "<%= asset_path('typeahead/list-content.html')%>";
+      # tplContent = '<a tabindex="-1"><span class="index">{{index+1}}</span><span ng-bind-html="match.label | scHighlight:query"></span></a>';
+      # tpl = '<a tabindex="-1" class="novo-registro">
+      #           <i class="ico-mais-2"></i>  Adicionar: <span ng-bind-html="match.label | scHighlight:query">
+      #          </a>';
+
+      placeTemplate = (tamplate)->
+        element.replaceWith($compile(tamplate.trim())(scope))
+        return
+
+      if tplUrl = $parse(attrs.templateUrl)(scope.$parent) || tplContentUrl
+        $http.get(tplUrl, cache: $templateCache).success (tplContent)->
+          placeTemplate tplContent
+
+      return
+]

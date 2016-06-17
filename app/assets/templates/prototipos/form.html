@@ -1,0 +1,106 @@
+<div sc-modal="formulario" class="sc-modal-xxl">
+  <div class="sc-modal-header">
+    <i ng-click="formulario.close()" class="sc-modal-close sc-icon sc-icon-fechar-1 sc-cursor-pointer sc-text-gray sc-badge-hover-red"></i>
+    <div class="align-center sc-label">Formulário</div>
+  </div>
+  <div class="sc-modal-body">
+    <div class="sc-p-md">
+      <div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Nome</div>
+          <input ng-model="formPrototipo.params.nome" ng-class="{'error':formPrototipo.errors.nome}" type="text" class="sc-input-default" style="width:100%"></input>
+        </div>
+        <div class="col-md-3 sc-p-b-md">
+          <div class="sc-label">Categoria</div>
+          <div class="sc-input-group">
+            <select ng-model="formPrototipo.params.categoria" ng-class="{'error':formPrototipo.errors.categoria}" class="sc-input-default" style="width:100%">
+              <option style="display: none"></option>
+              <option ng-repeat="i in categorias" value="{{i.value}}" >{{i.label}}</option>
+            </select>
+            <button class="sc-btn sc-btn-blue" ng-click="addCategoria.open()">
+              <i class="sc-icon sc-icon-mais-1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-3 sc-p-b-md">
+          <div class="sc-label">Relevância</div>
+          <select ng-model="formPrototipo.params.relevancia" ng-class="{'error':formPrototipo.errors.relevancia}" type="number" class="sc-input-default" style="width:100%">
+            <option style="display: none"></option>
+            <option ng-repeat= "i in relevancias" value="{{i.value}}">{{i.label}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Link Mockup</div>
+          <input ng-model="formPrototipo.params.mockup" ng-class="{'error':formPrototipo.errors.mockup}" type="text" class="sc-input-default" style="width:100%"></input>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label"> Link Protótipo</div>
+          <input ng-model="formPrototipo.params.link" ng-class="{'error':formPrototipo.errors.link}" type="text" class="sc-input-default" style="width:100%"></input>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Etapa </div>
+          <div class="sc-input-group">
+            <select ng-model="formPrototipo.params.etapa" ng-class="{'error':formPrototipo.errors.etapa}" class="sc-input-default" style="width:100%">
+              <option style="display: none"></option>
+              <option ng-repeat="i in etapas" value="{{i.value}}">{{i.label}}</option>
+            </select>
+            <button class="sc-btn sc-btn-blue">
+              <i class="sc-icon sc-icon-mais-1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Status</div>
+          <div class="sc-input-group">
+            <select ng-model="formPrototipo.params.status" ng-class="{'error':formPrototipo.errors.status}" class="sc-input-default" style="width:100%">
+              <option style="display: none"></option>
+              <option ng-repeat="i in status" value="{{i.value}}">{{i.label}}</option>
+            </select>
+            <button class="sc-btn sc-btn-blue">
+              <i class="sc-icon sc-icon-mais-1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Analista </div>
+          <select ng-model="formPrototipo.params.analista" ng-class="{'error':formPrototipo.errors.analista}" class="sc-input-default" style="width:100%">
+            <option style="display: none"></option>
+            <option ng-repeat="i in analistas" value="{{i.value}}">{{i.label}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 sc-p-b-md">
+          <div class="sc-label">Deselvolvedor</div>
+          <select ng-model="formPrototipo.params.desenvolvedor" ng-class="{'error':formPrototipo.errors.desenvolvedor}" class="sc-input-default" style="width:100%">
+            <option style="display: none"></option>
+            <option ng-repeat="i in desenvolvedores" value="{{i.value}}">{{i.label}}</option>
+          </select>
+        </div>
+        <div class="clear"></div>
+        <div class="col-md-12 sc-p-b-md">
+          <div style="width: 100%" class="sc-m-h-md sc-m-b-md">
+            <div>
+              <div class="sc-label">Tarefas <button ng-click="addTarefa()"  class="sc-btn sc-btn-sm sc-btn-blue">Adicionar</button></div>
+              <div class="flex" style="flex-wrap: wrap">
+                <div ng-repeat="i in teste" >
+                  <div class="sc-m-b-md">
+                    <input type="text" ng-model="formPrototipo.params.tarefas" ng-class="{'error':formPrototipo.errors.tarefas}" class="sc-input-default" />
+                    <span ng-hide="$first && teste.length == 1">
+                      <i ng-click="eliminarTarefa($index)" class="sc-modal-close sc-icon sc-icon-lixeira-1 sc-cursor-pointer sc-text-red sc-badge-hover-red"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sc-modal-footer">
+    <div>
+      <button ng-click="formulario.close()" class="sc-btn sc-m-h-md sc-btn-red">Cancelar</button>
+      <button ng-hide="formPrototipo.params.id" ng-click="novo()" class="sc-btn sc-m-h-md sc-btn-green">Salvar</button>
+      <button ng-show="formPrototipo.params.id" ng-click="update()" class="sc-btn sc-m-h-md sc-btn-green">Salvar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div sc-modal="addCategoria" class="sc-modal-lg">
+  <div class="sc-modal-header">
+    <i ng-click="formulario.open()" class="sc-modal-close sc-icon sc-icon-fechar-1 sc-cursor-pointer sc-text-gray sc-badge-hover-red"></i>
+    <div class="align-center sc-label">Configurações</div>
+  </div>
+  <div class="sc-modal-body sc-m-h-xxxl">
+    <div class="sc-input-group">
+      <input ng-model="configs.formConfig.config" type="text" class="sc-input-default" ng-class="{'error': formConfig.config.error}" />
+      <button ng-hide="editarCategoria" type="button" class="sc-btn sc-btn-blue" ng-click="novaCategoria(configs)" style="border-bottom-right-radius: 0.3em;border-top-right-radius: 0.3em;">
+        <i class="sc-icon-mais-1"></i>
+      </button>
+      <button ng-show="editarCategoria" class="sc-btn sc-btn-green" type="button" ng-click="updateConfig(configs.formConfig.config)">
+        <i class="sc-icon sc-icon-visto-1"></i>
+      </button>
+      <button ng-show="editarCategoria" class="sc-btn sc-btn-red" type="button" ng-click="trocar()">
+        <i class="sc-icon sc-icon-fechar-1"></i>
+      </button>
+    </div>
+    <ul class="sc-accordion sc-m-v-lg">
+      <li ng-repeat = "item in configs" style="border-bottom: 1px solid rgb(218, 218, 218);">
+        <div class="sc-accordion-head pull-left sc-acc-flex sc-text-gray-sm sc-cursor-move" ng-class="{'sc-border-b-gray-light-dotted': !$last}">
+          <div class="col-md-3" style="width: 244px; height: 37px">{{item.formConfig.config}}</div>
+          <div class="pull-right sc-m-r-xxl">
+            <label>
+              <i class="sc-badge-hover-yellow sc-icon sc-icon-lapis" ng-click="editarCategorias(item)"></i>
+              <i class="sc-icon sc-badge-hover-red sc-icon-lixeira-1" ng-click="deletConfig($index)"></i>
+            </label>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

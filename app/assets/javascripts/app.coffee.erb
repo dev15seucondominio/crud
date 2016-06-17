@@ -1,0 +1,36 @@
+angular.module 'PrototypeSc', [
+  'sc.app.helpers'
+  'ngRoute'
+  'ngResource'
+]
+
+.run [
+  '$rootScope', 'scAlert', 'scTopMessages'
+  ($rootScope, scAlert, scTopMessages)->
+    $rootScope.scAlert = scAlert
+    $rootScope.scTopMessages = scTopMessages
+]
+
+.config [
+  '$locationProvider'
+  '$routeProvider'
+  ($locationProvider, $routeProvider)->
+    $routeProvider.otherwise
+      templateUrl: "<%= asset_path('prototipos/index.html') %>"
+      controller: 'Prototype::IndexCtrl'
+
+    $routeProvider.when '/prototipos',
+      templateUrl: "<%= asset_path('prototipos/index.html') %>"
+      controller: 'Prototype::IndexCtrl'
+
+    $locationProvider.html5Mode
+      enabled: true
+      requireBase: false
+]
+
+.controller 'PrototypeSc::Ctrl', [
+  '$scope'
+  'Templates'
+  ($scope, Templates)->
+    $scope.templates = Templates
+]

@@ -1,0 +1,4 @@
+<select ng-model="formPrototipo.params.categoria" ng-class="{'error':formPrototipo.errors.categoria}" type="number" class="sc-input-default" style="width:100%">
+  <option style="display: none"></option>
+  <option ng-repeat="i in categorias" value="{{i.value}}" >{{i.label}}</option>
+</select>
