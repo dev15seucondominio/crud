@@ -7,112 +7,93 @@
           <div style="justify-content: space-between;" class="flex flex-center">
             <div class="flex flex-center">
               <div class="sc-p-l-lg sc-p-l-none">
-                <button ng-class="novaEntrega._new ? 'sc-btn-gray':'sc-btn-blue'" ng-click="formCadastro()"
+                <button ng-click="formPrototipo.init_form()"
                 class="sc-btn sc-btn-blue sc-btn-awesomeness">
                   <div class="sc-btn-icon"><i class="sc-icon sc-icon-mais-1"></i></div>
                   <div class="sc-btn-text">Adicionar</div>
                 </button>
               </div>
               <div class="sc-p-l-lg">
-                <div class="sc-input-group">
-                  <input ng-keypress="check($event)" ng-disabled="filtro.open" type="search" ng-model="filtro.params.q" class="sc-input-default" />
-                  <button class="sc-btn sc-btn-cian">
-                    <i class="sc-icon sc-icon-duvida-1"></i>
-                  </button>
-                  <button ng-show ="filtro.open || filtro.params.q" class="sc-btn sc-btn-red" ng-click="clear()">
+                <form ng-submit="filtro.buscar()" class="sc-input-group">
+                  <input ng-disabled="filtro.avancado.opened || filtro.busca_avancada" ng-model="filtro.params.q" class="sc-input-default" />
+                  <button type="button" ng-hide="filtro.busca_avancada == null" class="sc-btn sc-btn-red" ng-click="filtro.clear()">
                     <i class="sc-icon sc-icon-fechar-1"></i>
                   </button>
-                  <button ng-hide ="filtro.open || filtro.params.q" class="sc-btn sc-btn-blue" ng-click="filtro.buscar()">
+                  <button type="submit" class="sc-btn sc-btn-blue">
                     <i class="sc-icon sc-icon-lupa-1"></i>
                   </button>
-                  <button class="sc-btn" ng-class="{'sc-btn-gray':filtro.open}" ng-click="filtro.open = !filtro.open; filtroFunil()" >
+                  <button type="button" class="sc-btn" ng-class="{'sc-btn-gray':filtro.avancado.opened}" ng-click="filtro.avancado.toggle()" >
                     <i class="sc-icon sc-icon-filtro-2"></i>
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
         <section id="top-bar-filter" style="margin-top: 40px">
-          <form ng-submit="filtro.buscar()" ng-show="filtro.open" class="ng-animation-slider sc-p-lg">
-            <div class="sc-align-bottom col-md-6">
-              <div class="col-md-12">
+          <form ng-submit="filtro.buscar()" ng-show="filtro.avancado.opened" class="ng-animation-slider sc-p-lg">
+            <div class="sc-align-bottom">
+              <div class="col-md-3 sc-m-b-md">
                 <label>
                   <div class="sc-label">Etapa</div>
-                  <select  class="sc-input-default" ng-model="filtro.params.etapa" style="width: 100%">]
+                  <select  class="sc-input-default sc-input-block" ng-model="filtro.params.etapa">
                     <option value=""></option>
                     <option ng-repeat="i in etapas" value="{{i.value}}">{{i.label}}</option>
                   </select>
                 </label>
               </div>
-              <div class="col-md-6 sc-m-v-md">
-                <div class="sc-align-bottom">
-                  <label>
-                    <div class="sc-label">Categoria</div>
-                    <select  class="sc-input-default" ng-model="filtro.params.categoria" style="width: 100%">]
-                      <option value=""></option>
-                      <option ng-repeat="i in categorias" value="{{i.value}}">{{i.label}}</option>
-                    </select>
-                  </label>
-                </div>
+              <div class="col-md-4 sc-m-b-md">
+                <label>
+                  <div class="sc-label">Categoria</div>
+                  <select  class="sc-input-default sc-input-block" ng-model="filtro.params.categoria">
+                    <option value=""></option>
+                    <option ng-repeat="i in categorias" value="{{i.value}}">{{i.label}}</option>
+                  </select>
+                </label>
               </div>
-              <div class="col-md-12">
-                <div class="sc-align-bottom">
-                  <label>
-                    <div class="sc-label">Analista:</div>
-                    <select  class="sc-input-default" ng-model="filtro.params.analista" style="width: 100%">]
-                      <option value=""></option>
-                      <option ng-repeat="i in analistas" value="{{i.value}}">{{i.label}}</option>
-                    </select>
-                  </label>
-                </div>
+              <div class="col-md-3 sc-m-b-md">
+                <label>
+                  <div class="sc-label">Analista:</div>
+                  <select  class="sc-input-default sc-input-block" ng-model="filtro.params.analista">
+                    <option value=""></option>
+                    <option ng-repeat="i in analistas" value="{{i.value}}">{{i.label}}</option>
+                  </select>
+                </label>
               </div>
+              <div class="col-md-2 sc-m-b-md">
+                <label>
+                  <div class="sc-label">Relevância</div>
+                  <select  class="sc-input-default sc-input-block" ng-model="filtro.params.relevancia">
+                    <option value=""></option>
+                    <option ng-repeat="i in relevancias" value="{{i.value}}">{{i.label}}</option>
+                  </select>
+                </label>
               </div>
-              <div class="sc-align-bottom col-md-6">
-              <div class="col-md-12">
+              <div class="col-md-3 sc-m-b-md">
                 <label>
                   <div class="sc-label">Status</div>
-                  <select  class="sc-input-default" ng-model="filtro.params.status" style="width: 100%">]
+                  <select  class="sc-input-default sc-input-block" ng-model="filtro.params.status">
                     <option value=""></option>
                     <option ng-repeat="i in status" value="{{i.value}}">{{i.label}}</option>
                   </select>
                 </label>
               </div>
-              <div class="col-md-6 sc-m-v-md">
-                <div class="sc-align-bottom">
-                  <label>
-                    <div class="sc-label">Relevância</div>
-                    <select  class="sc-input-default" ng-model="filtro.params.relevancia" style="width: 100%">]
-                      <option value=""></option>
-                      <option ng-repeat="i in relevancias" value="{{i.value}}">{{i.label}}</option>
-                    </select>
-                  </label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="sc-align-bottom">
-                  <label>
-                    <div class="sc-label">Desenvolvedor</div>
-                    <select  class="sc-input-default" ng-model="filtro.params.desenvolvedor" style="width: 100%">]
-                      <option value=""></option>
-                      <option ng-repeat="i in desenvolvedores" value="{{i.value}}">{{i.label}}</option>
-                    </select>
-                  </label>
-                </div>
+              <div class="col-md-3 sc-m-b-md">
+                <label>
+                  <div class="sc-label">Desenvolvedor</div>
+                  <select  class="sc-input-default" ng-model="filtro.params.desenvolvedor" style="width: 100%">]
+                    <option value=""></option>
+                    <option ng-repeat="i in desenvolvedores" value="{{i.value}}">{{i.label}}</option>
+                  </select>
+                </label>
               </div>
             </div>
             <div class="clear"></div>
             <hr/>
             <div class="sc-p-h-md sc-p-b-md sc-align-bottom">
-              <button type="submit" ng-click="filtro.open = !filtro.open" class="sc-btn sc-btn-blue sc-btn-awesomeness">
+              <button type="submit" class="sc-btn sc-btn-blue sc-btn-awesomeness">
                 <div class="sc-btn-icon"><i class="sc-icon sc-icon-lupa-2"></i></div>
                 <div class="sc-btn-text hidden-xs hidden-sm">Pesquisar</div>
-              </button>
-            </div>
-            <div class="sc-p-h-md sc-p-b-md sc-align-bottom">
-              <button type="button" ng-click="limparBusca()" class="sc-btn sc-btn-red sc-btn-awesomeness">
-                <div class="sc-btn-icon"><i class="sc-icon sc-icon-fechar-1"></i></div>
-                <div class="sc-btn-text hidden-xs hidden-sm">Limpar Busca</div>
               </button>
             </div>
           </form>
@@ -135,12 +116,69 @@
               <div class="col-md-2">Etapa</div>
               <div class="col-md-2">Relevância</div>
               <div class="col-md-3">Categoria</div>
-              <div class="col-md-2">Analista</div>
+              <div class="col-md-2 hidden-sm">Analista</div>
               <div class="col-md-1"></div>
             </div>
             </hr>
           </li>
-          <li ng-init="initForm(prototipo)" ng-controller="Item::Ctrl" ng-repeat="prototipo in prototipos | orderBy: '-id'" ng-include="templates.prototipos.item"></li>
+
+          <li ng-show="prototipos.any() && !carregando" ng-class="{ 'sc-acc-blue-dark':prototipo.acc.opened }" ng-init="initForm(prototipo)" ng-controller="Item::Ctrl" ng-repeat="prototipo in prototipos | orderBy: '-id'" style="border-bottom: 1px solid rgb(218, 218, 218);">
+            <div ng-click="toggleAcc(prototipo)" class="sc-accordion-head sc-acc-flex sc-text-gray-sm ">
+              <div class="col-md-1 align-center" style="width: 82px; height: 37px">
+                <input ng-model="selections.allSelected" type="checkbox" class="sc-checkbox sc-checkbox-blue">
+              </div>
+              <div class="col-md-2" style="width: 163px; height: 37px">
+                <span class="sc-text-sm sc-border-radius sc-p-h-md sc-p-v-sm sc-text-white" ng-class="{'sc-bg-blue': prototipo.status.label == 'Aguardando',
+                         'sc-bg-yellow': prototipo.status.label == 'Em Execução', 'sc-bg-green': prototipo.status.label == 'Concluído'}">{{prototipo.status.label}}</span>
+              </div>
+              <div class="col-md-3" style="width: 244px; height: 37px">{{prototipo.tarefas}}</div>
+              <div class="col-md-2" style="width: 163px; height: 37px">{{prototipo.etapa.label}}</div>
+              <div class="col-md-2" style="width: 163px; height: 37px">
+                <div class="sc-m-l-xxxl">
+                  {{prototipo.relevancia}}
+                </div>
+              </div>
+              <div class="col-md-3" style="width: 244px; height: 37px">{{prototipo.categoria.label}}</div>
+              <div class="col-md-2 hidden-sm" style="width: 163px; height: 37px">{{prototipo.analista}}</div>
+              <div class="pull-right sc-m-r-xxl">
+                <label >
+                  <span sc-dropdown-menu sc-stop-click="sc-stop-click" class="sc-dropdown pull-right">
+                    <div ng-click="menu.toggle()">
+                      <i ng-class="{'sc-badge-active':menu.isOn, 'sc-badge-hover-gray': !prototipo.acc.opened,'sc-badge-hover-white': prototipo.acc.opened }" class="sc-icon sc-icon-reticiencias-v"></i>
+                    </div>
+                    <ul class="sc-dropdown-menu ng-animation-slider" ng-show="menu.isOn">
+                      <li ng-click="actionMenu(prototipo, item)" ng-repeat="item in dadosGerais.menu">
+                        <i class="pull-left sc-p-h-md {{item.icon}}"></i>
+                        <span>{{item.name}}</span>
+                      </li>
+                    </ul>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div ng-if="prototipo.acc.opened" class="sc-accordion-body ng-animation-slider">
+              <div ng-if="!prototipo.carregando" ng-include="templates.prototipos.item"></div>
+              <div ng-if="prototipo.carregando">
+                <div class="sc-accordion-elastic-col sc-p-v-md align-center sc-text-blue">
+                  <i class="sc-icon sc-icon-carregando-2 sc-icon-spin"></i>
+                  Carregando...
+                </div>
+              </div>
+            </div>
+          </li>
+          <li ng-show="!prototipos.any() && carregando">
+            <div class="sc-p-v-md align-center sc-text-blue">
+              <i class="sc-icon sc-icon-carregando-2 sc-icon-spin"></i>
+              Carregando...
+            </div>
+          </li>
+          <li ng-show="!prototipos.any() && !carregando">
+            <div class="sc-p-v-md align-center sc-text-gray">
+              <i class="sc-icon sc-icon-exclamacao-3"></i>
+              Não possui nenhum prototipo!
+            </div>
+          </li>
         </ul>
       </section>
     </section>
@@ -148,10 +186,10 @@
 </section>
 
 <div ng-include="templates.prototipos.form"></div>
-<div ng-include="templates.prototipos.addCategoria"></div>
+<div ng-include="templates.prototipos.types_configs"></div>
 
 <!-- Loagding Page-->
-<div sc-loading show-on="carregando" block-screen="true"></div>
+<!-- <div sc-loading show-on="carregando" block-screen="true"></div> -->
 
 <!-- scTopMessages-->
 <div ng-click="scTopMessages.close()" ng-cloak="" ng-show="scTopMessages.toggler.opened" class="sc-cursor-pointer sc-top-messages ng-cloak ng-animation-slider">

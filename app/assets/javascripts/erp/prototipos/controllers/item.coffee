@@ -11,12 +11,16 @@ angular.module 'PrototypeSc'
             load_prototipo()
 
       load_prototipo = ()->
-        return if sc.prototipo?.nome?
+        return if sc.prototipo.carregando || sc.prototipo.carregado
+        sc.prototipo.carregando = true
         Prototipos.show {id: sc.prototipo.id},
           (data)->
             sc.prototipo = angular.extend sc.prototipo, data
+            sc.prototipo.carregado = true
+            sc.prototipo.carregando = false
           (resp)->
             console.log 'Erro show'
+            sc.prototipo.carregando = false
 
       sc.deletarComentario = (comentario)->
         Prototipos.comentarios_destroy comentario,
@@ -63,9 +67,7 @@ angular.module 'PrototypeSc'
         switch item.name
           when 'Editar'
             load_prototipo()
-            $timeout ->
-              sc.editarForm(sc.prototipo)
-            , 100
+            sc.formPrototipo.init_form(prototipo)
           when 'Excluir'
             sc.deletarAlert(sc.prototipo)
 

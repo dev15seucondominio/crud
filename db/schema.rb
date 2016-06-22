@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617121732) do
+ActiveRecord::Schema.define(version: 20160617140719) do
 
   create_table "asdf", id: false, force: :cascade do |t|
     t.text "a"
@@ -58,16 +58,6 @@ ActiveRecord::Schema.define(version: 20160617121732) do
     t.string   "relevancia"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-  end
-
-  create_table "prototype_sc_controllers", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "prototype_scs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end

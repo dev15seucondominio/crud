@@ -3,19 +3,7 @@ class PrototipoService
   def self.index(params)
     prototipo = Prototipo.buscar(params)
 
-    obj = {
-      lista: prototipo.map do |pro|
-        {
-          id: pro.id,
-          tarefas: pro.tarefas,
-          status: pro.status,
-          relevancia: pro.relevancia,
-          categoria: pro.categoria,
-          etapa: pro.etapa,
-          analista: pro.analista
-        }
-      end
-    }
+    obj = { lista: prototipo.map(&:slim_obj) }
 
     obj.merge!(obj_settings) if params[:with_settings]
 
@@ -27,10 +15,6 @@ class PrototipoService
     return [:errors, comentario] unless comentario.destroy
 
     [:success, comentario.to_frontend_obj]
-  end
-
-  def self.lista_show(prototipo)
-    obj = { lista: prototipo.tap(&:to_frontend_obj) }
   end
 
   def self.show(params)
@@ -49,7 +33,11 @@ class PrototipoService
   end
 
   def self.create(params)
-    prototipo = Prototipo.new(params)
+    attrs = params.except(:categoria, :etapa, :status)
+    attrs[:tarefas] = 'asdf'
+    attrs.merge! change_types(params)
+
+    prototipo = Prototipo.new(attrs)
     return [:errors, prototipo] unless prototipo.save
 
     comentarios = params[:comentarios]
@@ -57,7 +45,7 @@ class PrototipoService
       comentarios
     ) if comentarios.present? && comentarios.any?
 
-    [:success, prototipo.to_frontend_obj]
+    [:success, prototipo.slim_obj]
   end
 
   def self.destroy(params)
@@ -70,8 +58,11 @@ class PrototipoService
   end
 
   def self.update(params)
+    attrs = params.except(:categoria, :etapa, :status)
+    attrs.merge! change_types(params)
+
     prototipo = Prototipo.find(params[:id])
-    prototipo.assign_attributes(params.except(:comentarios))
+    prototipo.assign_attributes(attrs.except(:comentarios))
 
     return [:errors, prototipo] unless prototipo.save
 
@@ -87,25 +78,42 @@ class PrototipoService
 
   def self.obj_settings
     {
-      categorias: Prototipo::CATEGORIAS.clone.map do |categoria|
-        { label: categoria, value: categoria }
-      end,
-      relevancias: Prototipo::RELEVANCIAS.map do |relevancia|
+      categorias: ::Categoria.all.ordem_label.map(&:to_frontend_obj),
+      etapas: ::Etapa.all.ordem_label.map(&:to_frontend_obj),
+      status: ::Status.all.ordem_label.map(&:to_frontend_obj),
+      relevancias: ::Prototipo::RELEVANCIAS.map do |relevancia|
         { label: relevancia, value: relevancia }
       end,
-      etapas: Prototipo::ETAPAS.clone.map do |etapa|
-        { label: etapa, value: etapa }
-      end,
-      status: Prototipo::STATUS.clone.map do |status|
-        { label: status, value: status }
-      end,
-      analistas: Pessoa.analistas.clone.map do |pessoa|
+      analistas: ::Pessoa.analistas.clone.map do |pessoa|
         { label: pessoa.nome, value: pessoa.nome }
       end,
-      desenvolvedores: Pessoa.desenvolvedores.clone.map do |pessoa|
+      desenvolvedores: ::Pessoa.desenvolvedores.clone.map do |pessoa|
         { label: pessoa.nome, value: pessoa.nome }
       end
     }
   end
   private_class_method :obj_settings
+
+  def self.change_types(params)
+    attrs = {}
+
+    if params[:categoria].present?
+      attrs[:categoria] = select_type(params[:categoria]).label
+    end
+    if params[:etapa].present?
+      attrs[:etapa] = select_type(params[:etapa]).label
+    end
+    if params[:status].present?
+      attrs[:status] = select_type(params[:status]).label
+    end
+
+    attrs
+  end
+  private_class_method :change_types
+
+  def self.select_type(type_values)
+    raise "#{type_values}"
+    ::ConfigPrototipo.where(value: type_values).first
+  end
+  private_class_method :select_type
 end

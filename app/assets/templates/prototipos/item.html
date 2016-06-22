@@ -1,119 +1,77 @@
-<div ng-click="toggleAcc(prototipo)">
-  <ul class="sc-accordion">
-    <li ng-class="{ 'sc-acc-blue-dark':prototipo.acc.opened }" style="border-bottom: 1px solid rgb(218, 218, 218);">
-      <div class="sc-accordion-head sc-acc-flex sc-text-gray-sm ">
-        <div class="col-md-1 align-center" style="width: 82px; height: 37px">
-          <input ng-model="selections.allSelected" type="checkbox" class="sc-checkbox sc-checkbox-blue">
-        </div>
-        <div class="col-md-2" style="width: 163px; height: 37px">
-          <span class="sc-text-sm sc-border-radius sc-p-h-md sc-p-v-sm sc-text-white" ng-class="{'sc-bg-blue': prototipo.status == 'Aguardando',
-                   'sc-bg-yellow': prototipo.status == 'Em Execução', 'sc-bg-green': prototipo.status == 'Concluído'}">{{prototipo.status}}</span>
-        </div>
-        <div class="col-md-3" style="width: 244px; height: 37px">{{prototipo.tarefas}}</div>
-        <div class="col-md-2" style="width: 163px; height: 37px">{{prototipo.etapa}}</div>
-        <div class="col-md-2" style="width: 163px; height: 37px">
-          <div class="sc-m-l-xxxl">
-            {{prototipo.relevancia}}
+<div class="sc-p-md">
+  <div class="sc-fieldset flex flex-wrap">
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Nome:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.nome}}</span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Categoria:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.categoria.label}}</span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Relevância:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.relevancia}}</span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Link Mockup:</spam>
+      <a href="{{prototipo.mockup}}" class="sc-text-blue sc-p-l-md">{{prototipo.mockup}}</a>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Link Protótipo:</spam>
+      <a href="{{prototipo.link}}" class="sc-text-blue sc-p-l-md">{{prototipo.link}}</a>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray"> Etapa:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.etapa.label}}</span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Analista:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.analista}}</span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Desenvolvedor:</spam>
+      <span class="sc-text-blue sc-p-l-md">{{prototipo.desenvolvedor}}</span>
+    </div>
+  </div>
+  <div class="sc-fieldset flex flex-wrap">
+    <div class="col-md-12 sc-p-b-md">
+      <div>
+        <span class="sc-label">Nome do Usuário:</span>
+        <input ng-model="comentario.nome" ng-class="{'error':mensagemError}" type="text" class="sc-m-l-md sc-input-default"/>
+      </div>
+      <span class="sc-label">Comentário:</span>
+      <div class="sc-p-t-md">
+        <textarea ng-model="comentario.mensagem" class="sc-input-default" rows="4" style="width:100%" ng-class="{'error':mensagemError}"></textarea>
+        <p class="pull-left sc-text-red" ng-show="mensagemError">
+          <span class="sc-p-r-md">
+            <i class="sc-icon sc-icon-exclamacao-3"></i>
+          </span>
+          Os campos "Nome" e "Comentário" não podem ser vazio!
+        </p>
+        <button class="sc-btn sc-btn-blue sc-btn-awesomeness pull-right sc-m-t-md" ng-click="enviarComentario(comentario)">
+          <div class="sc-btn-icon">
+            <i class="sc-icon sc-icon-comentarios"></i>
           </div>
-        </div>
-        <div class="col-md-3" style="width: 244px; height: 37px">{{prototipo.categoria}}</div>
-        <div class="col-md-2" style="width: 163px; height: 37px">{{prototipo.analista}}</div>
-        <div class="pull-right sc-m-r-xxl">
-          <label >
-            <span sc-dropdown-menu sc-stop-click="sc-stop-click" class="sc-dropdown pull-right">
-              <div ng-click="menu.toggle()">
-                <i ng-class="{'sc-badge-active':menu.isOn, 'sc-badge-hover-gray': !prototipo.acc.opened,'sc-badge-hover-white': prototipo.acc.opened }" class="sc-icon sc-icon-reticiencias-v"></i>
-              </div>
-              <ul class="sc-dropdown-menu ng-animation-slider" ng-show="menu.isOn">
-                <li ng-click="actionMenu(prototipo, item)" ng-repeat="item in dadosGerais.menu">
-                  <i class="pull-left sc-p-h-md {{item.icon}}"></i>
-                  <span>{{item.name}}</span>
-                </li>
-              </ul>
-            </span>
-          </label>
-        </div>
-      </div>
-    </li>
-  </ul>
-</div>
-
-<div ng-show="prototipo.acc.opened" class="sc-accordion-body ng-animation-slider">
-  <div class="sc-p-md">
-    <div class="sc-fieldset flex flex-wrap">
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Nome:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.nome}}</span>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Categoria:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.categoria}}</span>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Relevância:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.relevancia}}</span>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Link Mockup:</spam>
-        <a href="{{prototipo.mockup}}" class="sc-text-blue sc-p-l-md">{{prototipo.mockup}}</a>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Link Protótipo:</spam>
-        <a href="{{prototipo.link}}" class="sc-text-blue sc-p-l-md">{{prototipo.link}}</a>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray"> Etapa:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.etapa}}</span>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Analista:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.analista}}</span>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-text-gray">Desenvolvedor:</spam>
-        <span class="sc-text-blue sc-p-l-md">{{prototipo.desenvolvedor}}</span>
+          <div class="sc-btn-text">Enviar Comentário</div>
+        </button>
       </div>
     </div>
-    <div class="sc-fieldset flex flex-wrap">
-      <div class="col-md-12 sc-p-b-md">
-        <div>
-          <span class="sc-label">Nome do Usuário:</span>
-          <input ng-model="comentario.nome" ng-class="{'error':mensagemError}" type="text" class="sc-m-l-md sc-input-default"/>
-        </div>
-        <span class="sc-label">Comentário:</span>
-        <div class="sc-p-t-md">
-          <textarea ng-model="comentario.mensagem" class="sc-input-default" rows="4" style="width:100%" ng-class="{'error':mensagemError}"></textarea>
-          <p class="pull-left sc-text-red" ng-show="mensagemError">
-            <span class="sc-p-r-md">
-              <i class="sc-icon sc-icon-exclamacao-3"></i>
-            </span>
-            Os campos "Nome" e "Comentário" não podem ser vazio!
-          </p>
-          <button class="sc-btn sc-btn-blue sc-btn-awesomeness pull-right sc-m-t-md" ng-click="enviarComentario(comentario)">
-            <div class="sc-btn-icon">
-              <i class="sc-icon sc-icon-comentarios"></i>
-            </div>
-            <div class="sc-btn-text">Enviar Comentário</div>
-          </button>
-        </div>
-      </div>
-      <div class="col-md-12 sc-p-b-md">
-        <span class="sc-p-r-sm sc-p-t-sm"><i class=" sc-text-xxl sc-icon sc-label sc-icon-comentarios"></i></span>
-        <span class="sc-label">Comentários</span>
-        <div class="sc-fieldset" ng-repeat="i in prototipo.comentarios">
-          <div class="pull-right" ng-click="deletarComentario(i)"><i class="sc-badge-hover-red sc-icon sc-icon-lixeira-1"></i></div>
-          <div style="display:flex" class="sc-p-b-md">
-            <div class="sc-border-gray-dark-solid-md sc-border-radius" style="width:28px">
-              <i class="sc-text-xxl sc-text-black sc-icon-homem-1 sc-icon"></i>
-            </div>
-            <div class="sc-p-l-md">
-              <span class="sc-text-gray"> {{i.nome}}</span>
-            </div>
+    <div class="col-md-12 sc-p-b-md">
+      <span class="sc-p-r-sm sc-p-t-sm"><i class=" sc-text-xxl sc-icon sc-label sc-icon-comentarios"></i></span>
+      <span class="sc-label">Comentários</span>
+      <div class="sc-fieldset" ng-repeat="i in prototipo.comentarios">
+        <div class="pull-right" ng-click="deletarComentario(i)"><i class="sc-badge-hover-red sc-icon sc-icon-lixeira-1"></i></div>
+        <div style="display:flex" class="sc-p-b-md">
+          <div class="sc-border-gray-dark-solid-md sc-border-radius" style="width:28px">
+            <i class="sc-text-xxl sc-text-black sc-icon-homem-1 sc-icon"></i>
           </div>
-          <div class="sc-text-gray"> {{i.mensagem}}</div>
+          <div class="sc-p-l-md">
+            <span class="sc-text-gray"> {{i.nome}}</span>
+          </div>
         </div>
+        <div class="sc-text-gray"> {{i.mensagem}}</div>
       </div>
     </div>
   </div>
-  <div class="clear"></div>
 </div>
+<div class="clear"></div>

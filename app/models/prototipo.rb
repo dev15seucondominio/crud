@@ -10,170 +10,106 @@ class Prototipo < ActiveRecord::Base
   has_many :comentarios, class_name: 'Comentario', foreign_key: :prototipo_id
 
   scope :buscar, lambda { |params|
-    scope = all
-    unless params[:q].blank?
-      # exemplo OR
-      q = []
-      params_arr = []
+    scoped = all
 
-      unless params[:q].sem_numeros.blank?
-        q << ['(nome LIKE ? )', '(analista LIKE ?)', '(desenvolvedor LIKE ?)',
-              '(tarefas LIKE ?)']
-        params_arr << "%#{params[:q].sem_numeros}%"
-        params_arr << "%#{params[:q].sem_numeros}%"
-        params_arr << "%#{params[:q].sem_numeros}%"
-        params_arr << "%#{params[:q].sem_numeros}%"
-      end
-
-      unless params[:q].somente_numeros.blank?
-        q << '(tarefas LIKE ?)'
-        params_arr << "%#{params[:q].somente_numeros.to_i}%"
-      end
-      scope = scope.where(*q.join(' OR '), *params_arr.flatten)
+    if params[:q].blank?
+      scoped = scoped.busca_avancada(params)
+    else
+      scoped = scoped.busca_simples(params[:q])
     end
 
-    unless params[:q].present?
-      q = []
-      params_arr = []
-
-      if params[:analista].present?
-        q << '(analista LIKE ?)'
-        params_arr << "%#{params[:analista]}%"
-      end
-
-      if params[:relevancia].present?
-        q << '(relevancia LIKE ?)'
-        params_arr << "%#{params[:relevancia]}%"
-      end
-
-      if params[:categoria].present?
-        q << '(categoria LIKE ?)'
-        params_arr << "%#{params[:categoria]}%"
-      end
-
-      if params[:status].present?
-        q << '(status LIKE ?)'
-        params_arr << "%#{params[:status]}%"
-      end
-
-      if params[:etapa].present?
-        q << '(etapa LIKE ?)'
-        params_arr << "%#{params[:etapa]}%"
-      end
-
-      if params[:desenvolvedor].present?
-        q << '(desenvolvedor LIKE ?)'
-        params_arr << "%#{params[:desenvolvedor]}%"
-      end
-      scope = scope.where(*q.join(' AND '), *params_arr.flatten)
-    end
-    scope
+    scoped
   }
 
-  CATEGORIAS = [
-    'Agenda',
-    'App - Android',
-    'App - IOS',
-    'Arquitetura',
-    'Bancos',
-    'Biometria - Controle de Acesso',
-    'Biometria - Ponto Eletrônico / Atrasos',
-    'Cadastro de Clientes',
-    'Cadastro de Morador',
-    'Chat',
-    'Câmeras',
-    'Circulares',
-    'Cobrança',
-    'Condomínios',
-    'Compras',
-    'Contas',
-    'CRM',
-    'Controle de Acesso (Permissões)',
-    'Contabilidade',
-    'Dashboard',
-    'Deploy',
-    'Empréstimos (Chaves e Objetos)',
-    'Demonstração',
-    'Documentos',
-    'Documentação',
-    'Encomendas',
-    'Estoque / Patrimônio',
-    'Ferramentas / Serviços / Infra',
-    'Financeiro / Acordos',
-    'Financeiro / Boletos',
-    'Financeiro / Cadastro Pessoas',
-    'Financeiro / Cobranças',
-    'Financeiro / Fração',
-    'Financeiro / Lançamentos',
-    'Financeiro / Leituras',
-    'Financeiro / Ofertas',
-    'Financeiro / Plano de Contas',
-    'Financeiro / Previsões Orçamentárias',
-    'Financeiro / Rateio',
-    'Financeiro / Unidades',
-    'Fornecedores',
-    'Git',
-    'Infrações',
-    'Leituras (gás, luz e água)',
-    'Manual de Uso do Software',
-    'Menu',
-    'Minhas Residências',
-    'Mudanças',
-    'Mural de Recados',
-    'Notificações',
-    'Ocorrências',
-    'Pagamentos',
-    'Passagem de Serviço',
-    'Protótipo',
-    'Recados',
-    'Redmine',
-    'Site SeuCondominio.com.br / CMS',
-    'Site dos Clientes (Cond., Adm, Terc)',
-    'Suporte',
-    'SysAdmin',
-    'Tarefas',
-    'Templates',
-    'Telefones Úteis',
-    'Testes',
-    'Uikit',
-    'Usuário',
-    'Visitantes',
-    'Votações',
-    'RF-id',
-    'Blog'
-  ].freeze
+  scope :busca_avancada, lambda { |params|
+    scoped = all
 
-  ETAPAS = [
-    'Pesquisa',
-    'Mockup',
-    'Validação',
-    'Prototipação Front-End',
-    'Prototipação Back-End'
-  ].freeze
+    q = []
+    params_arr = []
 
-  STATUS = [
-    'Aguardando',
-    'Em Execução',
-    'Concluído'
-  ].freeze
+    if params[:analista].present?
+      q << '(analista LIKE ?)'
+      params_arr << "%#{params[:analista]}%"
+    end
+
+    if params[:relevancia].present?
+      q << '(relevancia LIKE ?)'
+      params_arr << "%#{params[:relevancia]}%"
+    end
+
+    if params[:categoria].present?
+      q << '(categoria LIKE ?)'
+      params_arr << "%#{params[:categoria]}%"
+    end
+
+    if params[:status].present?
+      q << '(status LIKE ?)'
+      params_arr << "%#{params[:status]}%"
+    end
+
+    if params[:etapa].present?
+      q << '(etapa LIKE ?)'
+      params_arr << "%#{params[:etapa]}%"
+    end
+
+    if params[:desenvolvedor].present?
+      q << '(desenvolvedor LIKE ?)'
+      params_arr << "%#{params[:desenvolvedor]}%"
+    end
+    scoped = scoped.where(*q.join(' AND '), *params_arr.flatten)
+
+    scoped
+  }
+
+  scope :busca_simples, lambda { |q|
+    scoped = all
+
+    query = []
+    params_arr = []
+
+    unless q.sem_numeros.blank?
+      query << ['(nome LIKE ? )', '(analista LIKE ?)', '(desenvolvedor LIKE ?)',
+            '(tarefas LIKE ?)']
+      params_arr << "%#{q.sem_numeros}%"
+      params_arr << "%#{q.sem_numeros}%"
+      params_arr << "%#{q.sem_numeros}%"
+      params_arr << "%#{q.sem_numeros}%"
+    end
+
+    unless q.somente_numeros.blank?
+      query << '(tarefas LIKE ?)'
+      params_arr << "%#{q.somente_numeros.to_i}%"
+    end
+
+    scoped.where(*query.join(' OR '), *params_arr.flatten)
+  }
 
   RELEVANCIAS = (0..10).to_a.freeze
 
-  def to_frontend_obj
+  def slim_obj
     attrs = {
       id: id,
-      nome: nome,
-      link: link,
-      etapa: etapa,
-      status: status,
-      mockup: mockup,
       tarefas: tarefas,
       analista: analista,
-      categoria: categoria,
       relevancia: relevancia,
-      desenvolvedor: desenvolvedor,
-      comentarios: comentarios.map(&:to_frontend_obj)
+      etapa: { label: etapa, value: etapa.fileize },
+      status: { label: status, value: status.fileize },
+      categoria: { label: categoria, value: categoria.fileize }
     }
+
+    attrs
+  end
+
+  def to_frontend_obj
+    attrs = {
+      mockup: mockup,
+      nome: nome,
+      link: link,
+      desenvolvedor: desenvolvedor
+    }.merge slim_obj
+    attrs[:comentarios] = comentarios.map(&:to_frontend_obj)
+
+    attrs
   end
 
   private

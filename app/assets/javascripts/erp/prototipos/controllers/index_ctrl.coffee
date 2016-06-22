@@ -1,96 +1,14 @@
 angular.module 'PrototypeSc'
 
 .controller 'Prototype::IndexCtrl', [
-  '$scope', 'Prototipos', '$scModal', 'scAlert', '$timeout', 'scToggle','scTopMessages', '$routeParams'
-  (sc, Prototipos, $scModal, scAlert, $timeout, toggle, scTopMessages, routeParams)->
-    sc.formulario = new $scModal()
-    sc.addCategoria =  new $scModal()
-
-    sc.configs = [
-      {
-        id: 0
-        formConfig:
-          config: 'we'
-
-      }
-      {
-        id: 1
-        formConfig:
-          config: 'a\qwewqew/\we'
-
-      }
-      {
-        id: 2
-        formConfig:
-          config: 'weqewqekwqopewqkepqwek'
-
-      }
-      {
-        id: 3
-        formConfig:
-          config: 'w3434324e'
-
-      }
-    ]
-
-    sc.updateConfig = (categorias)->
-      sc.configs.formConfig = sc.configs[sc.configs.indexConfig]
-      sc.configs.formConfig.formConfig.config = categorias
-      sc.trocar()
-
-    sc.deletConfig = (index)->
-      sc.configs.splice index, 1
-
-    sc.trocar = (categoria)->
-      sc.editarCategoria = !sc.editarCategoria
-      sc.configs.formConfig=[]
-
-    sc.editarCategorias = (categoria)->
-      console.log categoria
-      sc.editarCategoria = !sc.editarCategoria
-      sc.configs.formConfig = angular.copy categoria.formConfig
-      sc.configs.indexConfig = sc.configs.indexOf categoria
-      console.log sc.configs.formConfig
-
-    sc.novaCategoria = (configs)->
-      sc.configs.push
-        formConfig:
-          config: configs.formConfig.config
-      configs.formConfig = ''
-
-    sc.with_settings = true
+  '$scope', 'Prototipos', '$scModal', 'scAlert', '$timeout', 'scToggle','scTopMessages', '$routeParams', 'PrototiposConfigs'
+  (sc, Prototipos, $scModal, scAlert, $timeout, toggle, scTopMessages, routeParams, PrototiposConfigs)->
     sc.prototipos = []
 
-    sc.check = ($event)->
-      keyCode = $event.which or $event.keyCode
-      if keyCode == 13
-        sc.filtro.buscar()
+    sc.with_settings = true
 
     sc.init = ()->
-      sc.filtro.buscar({with_settings: sc.with_settings})
-
-    sc.formCadastro = ()->
-      sc.formPrototipo = []
-      sc.formulario.open()
-
-    sc.editarForm = (prototipo)->
-      sc.formPrototipo.params = angular.copy prototipo
-      sc.formPrototipo.indexPrototipo = sc.prototipos.indexOf prototipo
-      sc.formPrototipo.errors = null
-      sc.formulario.open()
-
-    sc.addTarefa = ()->
-      sc.teste.push
-        campo: ''
-
-    sc.eliminarTarefa = (index)->
-      sc.teste.splice index, 1
-
-    sc.teste = [{}]
-
-    sc.searching = (o)->
-      sc.f = o
-      sc.filtros = false
+      sc.filtro.buscar with_settings: sc.with_settings
 
     sc.dadosGerais =
       menu: [
@@ -111,21 +29,84 @@ angular.module 'PrototypeSc'
         }
       ]
 
-    sc.limparBusca = ()->
-      sc.filtro.params =[]
-      sc.s = ''
+    sc.typesConfigs =
+      modal: new $scModal()
+      init: (type)->
+        @type = type
+        @preparar()
+        @modal.open()
+      preparar: ->
+        @carregando = true
 
-    sc.clear = ()->
-      sc.limparBusca()
-      sc.filtro.buscar()
-      sc.filtro.open = false
+        @listOrSelect()
+
+        @carregando = false
+      select: (obj)->
+        @listOrSelect obj
+        @fechar()
+      listOrSelect: (obj = null)->
+        sc.formPrototipo.params ||= {} if obj?
+        if @type == 'categoria'
+          if obj?
+            sc.formPrototipo.params.categoria =
+              label: obj.label
+              value: obj.value
+          else
+            @list = sc.categorias
+        else if @type == 'etapa'
+          if obj?
+            sc.formPrototipo.params.etapa =
+              label: obj.label
+              value: obj.value
+          else
+            @list = sc.etapas
+        else if @type == 'status'
+          if obj?
+            sc.formPrototipo.params.status =
+              label: obj.label
+              value: obj.value
+          else
+            @list = sc.status
+      salvar: ()->
+        params = angular.extend { type: @type }, @params
+        PrototiposConfigs.create params,
+          (data)->
+            sc.handleList sc.typesConfigs.list, data
+            sc.typesConfigs.limpar()
+          (resp)->
+            console.log resp
+            return
+      delete: (obj)->
+        PrototiposConfigs.destroy obj,
+          (data)->
+            index = sc.typesConfigs.list.indexOf obj
+            sc.typesConfigs.list.splice index, 1
+          (resp)->
+            console.log resp.data
+      update: ()->
+        PrototiposConfigs.update @params,
+          (data)->
+            sc.handleList sc.typesConfigs.list, data
+          (resp)->
+            console.log resp.data
+        @cancelar()
+      editar: (obj)->
+        @params = angular.extend {}, obj
+      cancelar: ()->
+        @limpar()
+      limpar: ()->
+        @params = {}
+      fechar: ()->
+        @limpar()
+        sc.formPrototipo.modal.open()
 
     sc.filtro =
-      _open: false
+      avancado: new toggle
       buscar: (opt = {})->
         return if sc.carregando
         sc.carregando = true
         params = angular.extend opt, @params
+        @change_avancada()
         Prototipos.list params,
           (data)->
             if sc.with_settings
@@ -136,64 +117,74 @@ angular.module 'PrototypeSc'
               sc.analistas = data.analistas
               sc.desenvolvedores = data.desenvolvedores
               sc.with_settings = false
+
             sc.prototipos = data.lista
             sc.carregando = false
-            sc.filtroFunil()
+
+            sc.filtro.avancado.close() if sc.filtro.busca_avancada
           (resp)->
             console.log resp
-
-
-    sc.filtroFunil = ()->
-      sc.filtro.q = true
-      switch sc.filtro.open
-        when true
-          sc.s = sc.filtro.params.q
-          sc.filtro.params.q = ''
-        when false
-          sc.filtro.params.q = sc.s
-
-    sc.objTemp = {}
-
-    sc.novaEntrega =
-      _new: false
-      dados:
-        params: {}
+      clear:()->
+        @params = {}
+        @buscar()
+        @avancado.close()
+      change_avancada: ()->
+        if @params?.q? && !@avancado.opened
+          @busca_avancada = false
+        else if @avancado.opened
+          @busca_avancada = true
+        else
+          @busca_avancada = null
 
     sc.formPrototipo =
-      params:
-        link: ''
-        nome: ''
-        etapa: ''
-        status:''
-        mockup:''
-        tarefas: ''
-        analista:''
-        categoria: ''
-        relevancia: ''
-        desenvolvedor: ''
-        comentarios:[
-          id: ''
-          nome: ''
-          mensagem: ''
-        ]
+      modal: new $scModal()
+      params: {}
+      init_form: (opt = {})->
+        params =
+          tarefas: [{value: ''}]
+        @params = angular.extend opt, params
+        @errors = null
+        @modal.open()
+      nova_tarefa: ()->
+        console.log @params.tarefas
+        @params.tarefas.push {}
+      apagar_tarefa: (index)->
+        @params.tarefas.splice index, 1
+      criar: ()->
+        Prototipos.create @params,
+          (data)->
+            sc.handleList sc.prototipos, data
+            sc.formPrototipo.fechar()
+          (resp)->
+            sc.formPrototipo.errors = resp.data.errors
+            console.log resp.data
+      update: ()->
+        Prototipos.update @params,
+          (data)->
+            sc.handleList sc.prototipos, data
+            sc.formPrototipo.fechar()
+          (resp)->
+            sc.formPrototipo.errors = resp.data.errors
+            console.log resp.data
+      fechar: ()->
+        @params = {}
+        @errors = null
+        @modal.close()
 
-    sc.novo = ()->
-      Prototipos.create sc.formPrototipo.params,
-        (data)->
-          sc.formPrototipo.errors = null
-          sc.prototipos.unshift data
-          sc.formulario.close()
-        (resp)->
-          sc.formPrototipo.errors = resp.data.errors
-          console.log resp.data
+    sc.handleList = (list, obj)->
+      addOrExtend = (list, obj)->
+        indexOfById = (list, id)->
+          index = 0
+          for i in list
+            return index if parseInt(i.id) == parseInt(id)
+            index++
+          -1
 
-    sc.update = ()->
-      Prototipos.update sc.formPrototipo.params,
-        (data)->
-          sc.formulario.close()
-          sc.formPrototipo.errors = null
-          sc.prototipos[sc.formPrototipo.indexPrototipo] = data
-        (resp)->
-          sc.formPrototipo.errors = resp.data.errors
-          console.log resp.data
+        idx = if obj.id? then indexOfById(list, obj.id) else list.indexOf(obj)
+        if idx is -1
+          list.unshift obj
+        else
+          angular.extend list[idx], obj
+
+      addOrExtend(list, obj)
 ]

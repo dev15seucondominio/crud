@@ -37,15 +37,15 @@ class PrototiposController < ApplicationController
     end
   end
 
-  def comentarios_destroy
-    status, resp = PrototipoService.comentarios_destroy params
-    case status
-    when :success
-      render json: resp
-    when :errors
-      render ::Resp.object_erros(resp)
-    end
-  end
+  # def comentarios_destroy
+  #   status, resp = PrototipoService.comentarios_destroy params
+  #   case status
+  #   when :success
+  #     render json: resp
+  #   when :errors
+  #     render ::Resp.object_erros(resp)
+  #   end
+  # end
 
   def create
     status, resp = PrototipoService.create prototipo_params(params)
@@ -86,8 +86,9 @@ class PrototiposController < ApplicationController
   def prototipo_params(params)
     if params[:prototipos].present?
       params.require(:prototipos).permit(
-        :id, :nome, :relevancia, :status, :etapa, :tarefas, :analista, :link,
-        :mockup, :desenvolvedor, :categoria
+        :id, :nome, :relevancia, :analista, :link, :mockup,
+        :desenvolvedor, status: [:value, :label], etapa: [:value, :label],
+        categoria: [:value, :label]
       )
     elsif params[:comentarios].present?
       params.require(:comentarios).permit(

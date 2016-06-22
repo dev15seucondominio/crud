@@ -7,4 +7,6 @@ Rails.application.routes.draw do
       delete :comentarios, to: 'prototipos#comentarios_destroy'
     end
   end
+  resources :configs_prototipos, only: [:create, :destroy, :update]
+  put '/configs_prototipos.json', to: 'configs_prototipos#update'
 end

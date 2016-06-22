@@ -1,3 +1,4 @@
+#
 class CreateConfigPrototipos < ActiveRecord::Migration
   def change
     create_table :config_prototipos do |t|
