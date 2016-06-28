@@ -2,12 +2,13 @@
 class Prototipo < ActiveRecord::Base
   before_validation :garantir_link
 
-  validates :nome, :categoria, :etapa, :tarefas, :desenvolvedor,
-            :status, :analista, presence: { message: 'Não pode ser vazio.' }
-  # validate :category, :etap, :stats, :relevan, :analist, :taref, :lin, :mo,
-  #          :dev, is_blank: false
+  validates :nome, :categoria, :etapa, :status, :analista, presence:
+            { message: 'Não pode ser vazio.' }
 
-  has_many :comentarios, class_name: 'Comentario', foreign_key: :prototipo_id
+  has_many :comentarios, class_name: 'Comentario', foreign_key: :prototipo_id,
+                         dependent: :destroy
+
+  accepts_nested_attributes_for :comentarios
 
   scope :buscar, lambda { |params|
     scoped = all
@@ -38,18 +39,24 @@ class Prototipo < ActiveRecord::Base
     end
 
     if params[:categoria].present?
+      status_label = ::ConfigPrototipo.where(value: params[:categoria]).first.label
+
       q << '(categoria LIKE ?)'
-      params_arr << "%#{params[:categoria]}%"
+      params_arr << "%#{status_label}%"
     end
 
     if params[:status].present?
+      status_label = ::ConfigPrototipo.where(value: params[:status]).first.label
+
       q << '(status LIKE ?)'
-      params_arr << "%#{params[:status]}%"
+      params_arr << "%#{status_label}%"
     end
 
     if params[:etapa].present?
+      status_label = ::ConfigPrototipo.where(value: params[:etapa]).first.label
+
       q << '(etapa LIKE ?)'
-      params_arr << "%#{params[:etapa]}%"
+      params_arr << "%#{status_label}%"
     end
 
     if params[:desenvolvedor].present?
@@ -69,7 +76,7 @@ class Prototipo < ActiveRecord::Base
 
     unless q.sem_numeros.blank?
       query << ['(nome LIKE ? )', '(analista LIKE ?)', '(desenvolvedor LIKE ?)',
-            '(tarefas LIKE ?)']
+                '(tarefas LIKE ?)']
       params_arr << "%#{q.sem_numeros}%"
       params_arr << "%#{q.sem_numeros}%"
       params_arr << "%#{q.sem_numeros}%"
@@ -86,6 +93,8 @@ class Prototipo < ActiveRecord::Base
 
   RELEVANCIAS = (0..10).to_a.freeze
 
+  serialize :tarefas, Array
+
   def slim_obj
     attrs = {
       id: id,
@@ -96,7 +105,6 @@ class Prototipo < ActiveRecord::Base
       status: { label: status, value: status.fileize },
       categoria: { label: categoria, value: categoria.fileize }
     }
-
     attrs
   end
 
@@ -116,6 +124,7 @@ class Prototipo < ActiveRecord::Base
 
   # # ira ser permitido a entra normal somente dos link de codepen.io,
   # # sem dominio ou herokuapp.com
+
   def garantir_link
     if link.present?
       link_params = link

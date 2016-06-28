@@ -2,13 +2,10 @@ angular.module 'PrototypeSc'
 
  .factory 'Prototipos', [
   '$resource'
-  'scAlert'
-  'scTopMessages'
-  ($resource, scAlert, scTopMessages)->
+  ($resource)->
 
     encapsulateData = (data) ->
       return JSON.stringify { 'prototipos': data }
-
 
     encapsulateData2 = (data) ->
       return JSON.stringify(JSON.decycle ({ 'prototipos': data }))
@@ -23,16 +20,6 @@ angular.module 'PrototypeSc'
         create:
           method: 'POST'
           transformRequest: encapsulateData
-        comentarios_create:
-          method: 'POST'
-          url: '/prototipos/comentarios'
-          transformRequest: (data) ->
-            return JSON.stringify { 'comentarios': data }
-        comentarios_destroy:
-          method: 'DELETE'
-          url: '/prototipos/comentarios'
-          transformRequest: (data) ->
-            return JSON.stringify { 'comentarios': data }
         update:
           method: 'PUT'
           transformRequest: encapsulateData2

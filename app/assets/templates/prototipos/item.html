@@ -48,7 +48,7 @@
           </span>
           Os campos "Nome" e "Comentário" não podem ser vazio!
         </p>
-        <button class="sc-btn sc-btn-blue sc-btn-awesomeness pull-right sc-m-t-md" ng-click="enviarComentario(comentario)">
+        <button class="sc-btn sc-btn-blue sc-btn-awesomeness pull-right sc-m-t-md" ng-click="objComentario.enviarComentario(comentario)">
           <div class="sc-btn-icon">
             <i class="sc-icon sc-icon-comentarios"></i>
           </div>
@@ -60,7 +60,7 @@
       <span class="sc-p-r-sm sc-p-t-sm"><i class=" sc-text-xxl sc-icon sc-label sc-icon-comentarios"></i></span>
       <span class="sc-label">Comentários</span>
       <div class="sc-fieldset" ng-repeat="i in prototipo.comentarios">
-        <div class="pull-right" ng-click="deletarComentario(i)"><i class="sc-badge-hover-red sc-icon sc-icon-lixeira-1"></i></div>
+        <div class="pull-right" ng-click="objComentario.deletarComentario(i)"><i class="sc-badge-hover-red sc-icon sc-icon-lixeira-1"></i></div>
         <div style="display:flex" class="sc-p-b-md">
           <div class="sc-border-gray-dark-solid-md sc-border-radius" style="width:28px">
             <i class="sc-text-xxl sc-text-black sc-icon-homem-1 sc-icon"></i>

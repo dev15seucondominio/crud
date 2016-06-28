@@ -4,8 +4,6 @@ class ConfigsPrototiposController < ApplicationController
 
   def create
     status, resp = ConfigPrototipoService.create config_params(params)
-    # raise ", -------- #{resp}"
-    # raise "#{resp}"
     case status
     when :success
       render json: resp

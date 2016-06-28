@@ -7,6 +7,10 @@ class ConfigPrototipo < ActiveRecord::Base
   scope :ordem_criacao, -> { order(created_at: :desc) }
   scope :ordem_label, ->   { order(label: :asc) }
 
+  scope :categoria, -> { where(type: 'Categoria') }
+  scope :etapas, -> { where(type: 'Etapa') }
+  scope :status, -> { where(type: 'Status') }
+
   def to_frontend_obj
     attrs = {
       id: id,

@@ -10,13 +10,6 @@ class PrototipoService
     [:success, obj]
   end
 
-  def self.comentarios_destroy(params)
-    comentario = Comentario.where(id: params[:id]).first
-    return [:errors, comentario] unless comentario.destroy
-
-    [:success, comentario.to_frontend_obj]
-  end
-
   def self.show(params)
     prototipo = Prototipo.where(id: params[:id]).first
     return :not_found if prototipo.blank?
@@ -24,26 +17,14 @@ class PrototipoService
     [:success, prototipo.to_frontend_obj]
   end
 
-  def self.comentarios_create(params)
-    comentario = Comentario.new(params)
-
-    return [:errors, comentario] unless comentario.save
-
-    [:success, comentario.to_frontend_obj]
-  end
-
   def self.create(params)
     attrs = params.except(:categoria, :etapa, :status)
-    attrs[:tarefas] = 'asdf'
     attrs.merge! change_types(params)
 
     prototipo = Prototipo.new(attrs)
     return [:errors, prototipo] unless prototipo.save
 
     comentarios = params[:comentarios]
-    prototipo.comentarios.create(
-      comentarios
-    ) if comentarios.present? && comentarios.any?
 
     [:success, prototipo.slim_obj]
   end
@@ -54,7 +35,7 @@ class PrototipoService
 
     return [:errors, prototipo] unless prototipo.destroy
 
-    [:success,  prototipo.to_frontend_obj]
+    [:success, prototipo.to_frontend_obj]
   end
 
   def self.update(params)
@@ -67,9 +48,6 @@ class PrototipoService
     return [:errors, prototipo] unless prototipo.save
 
     comentarios = params[:comentarios]
-    prototipo.comentarios.create(
-      comentarios.map
-    ) if comentarios.present? && comentarios.any?
 
     [:success, prototipo.to_frontend_obj]
   end
@@ -98,21 +76,19 @@ class PrototipoService
     attrs = {}
 
     if params[:categoria].present?
-      attrs[:categoria] = select_type(params[:categoria]).label
+      attrs[:categoria] = select_type(params[:categoria][:value]).label
     end
     if params[:etapa].present?
-      attrs[:etapa] = select_type(params[:etapa]).label
+      attrs[:etapa] = select_type(params[:etapa][:value]).label
     end
     if params[:status].present?
-      attrs[:status] = select_type(params[:status]).label
+      attrs[:status] = select_type(params[:status][:value]).label
     end
-
     attrs
   end
   private_class_method :change_types
 
   def self.select_type(type_values)
-    raise "#{type_values}"
     ::ConfigPrototipo.where(value: type_values).first
   end
   private_class_method :select_type

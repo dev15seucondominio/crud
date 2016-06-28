@@ -10,25 +10,6 @@ angular.module 'PrototypeSc'
     sc.init = ()->
       sc.filtro.buscar with_settings: sc.with_settings
 
-    sc.dadosGerais =
-      menu: [
-        {
-          name: 'Editar'
-          icon: 'sc-icon sc-icon-lapis'
-          # iconColor: 'sc-text-yellow'
-        }
-        {
-          name: 'Excluir'
-          icon: 'sc-icon sc-icon-lixeira-1'
-          iconColor: 'sc-text-red'
-        }
-        {
-          name: 'Histórico'
-          icon: 'sc-icon-historico'
-          # iconColor: 'sc-text-blue'
-        }
-      ]
-
     sc.typesConfigs =
       modal: new $scModal()
       init: (type)->
@@ -41,6 +22,23 @@ angular.module 'PrototypeSc'
         @listOrSelect()
 
         @carregando = false
+      deletarAlert: (obj)->
+        scAlert.open
+          title: 'Excluir registro?'
+          messages: 'Você não será capaz de recuperar esse registro!'
+          buttons: [
+            {
+              label: 'Cancelar'
+              color: 'red'
+            }
+            {
+              label: 'Confirmar'
+              color: 'green'
+              action: ()->
+                sc.typesConfigs.delete(obj)
+
+            }
+          ]
       select: (obj)->
         @listOrSelect obj
         @fechar()
@@ -127,12 +125,16 @@ angular.module 'PrototypeSc'
       clear:()->
         @params = {}
         @buscar()
+        @busca_simples = false
+        @busca_avancada = null
         @avancado.close()
       change_avancada: ()->
         if @params?.q? && !@avancado.opened
           @busca_avancada = false
         else if @avancado.opened
           @busca_avancada = true
+        else if @busca_avancada?
+          @busca_simples = false
         else
           @busca_avancada = null
 
@@ -146,10 +148,35 @@ angular.module 'PrototypeSc'
         @errors = null
         @modal.open()
       nova_tarefa: ()->
-        console.log @params.tarefas
         @params.tarefas.push {}
       apagar_tarefa: (index)->
         @params.tarefas.splice index, 1
+      deletarAlert: (prototipo)->
+        scAlert.open
+          title: 'Excluir registro?'
+          messages: 'Você não será capaz de recuperar esse registro!'
+          buttons: [
+            {
+              label: 'Cancelar'
+              color: 'red'
+            }
+            {
+              label: 'Confirmar'
+              color: 'green'
+              action: ()->
+                sc.formPrototipo.deletar(prototipo)
+
+            }
+          ]
+      deletar: (prototipo)->
+        Prototipos.destroy prototipo,
+          (data)->
+            index = sc.prototipos.indexOf prototipo
+            sc.prototipos.splice index, 1
+            scTopMessages.openSuccess "Registro excluído com sucesso!", {timeOut: 3000}
+          (resp)->
+            scTopMessages.openDanger "Erro ao deletar, porfavor recarregue a página!", {timeOut: 3000}
+            console.log resp.data
       criar: ()->
         Prototipos.create @params,
           (data)->

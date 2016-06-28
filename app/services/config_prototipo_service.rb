@@ -23,8 +23,8 @@ class ConfigPrototipoService
     attrs, = params.values_at(:label)
 
     configs_prototipos = ConfigPrototipo.where(id: params[:id]).first
-
-    configs_prototipos.assign_attributes(attrs)
+    configs_prototipos.assign_attributes(params)
+    # configs_prototipos.assign_attributes(attrs)
     return [:errors, configs_prototipos] unless configs_prototipos.save
 
     [:success, configs_prototipos.to_frontend_obj]

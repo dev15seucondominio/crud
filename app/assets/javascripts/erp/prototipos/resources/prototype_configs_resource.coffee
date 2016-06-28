@@ -2,9 +2,7 @@ angular.module 'PrototypeSc'
 
  .factory 'PrototiposConfigs', [
   '$resource'
-  'scAlert'
-  'scTopMessages'
-  ($resource, scAlert, scTopMessages)->
+  ($resource)->
 
     encapsulateData = (data) ->
       return JSON.stringify { 'configs_prototipos': data }
@@ -12,11 +10,8 @@ angular.module 'PrototypeSc'
     encapsulateData2 = (data) ->
       return JSON.stringify(JSON.decycle ({ 'configs_prototipos': data }))
 
-    $resource '/configs_prototipos/:id.json',
+    $resource '/prototipos/id/configs_prototipos/:id.json',
       { id: '@id' },
-        list:
-          method: 'GET'
-          toArray: true
         create:
           method: 'POST'
           transformRequest: encapsulateData

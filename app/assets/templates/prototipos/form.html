@@ -16,7 +16,7 @@
         <div class="col-md-3 sc-p-b-md">
           <div class="sc-label">Categoria</div>
           <div class="sc-input-group">
-            <select ng-model="formPrototipo.params.categoria" ng-class="{'error':formPrototipo.errors.categoria}" class="sc-input-default" style="width:100%">
+            <select ng-model="formPrototipo.params.categoria.value" ng-class="{'error':formPrototipo.errors.categoria}" class="sc-input-default" style="width:100%">
               <option style="display: none"></option>
               <option ng-repeat="i in categorias" value="{{i.value}}" >{{i.label}}</option>
             </select>
@@ -43,24 +43,24 @@
         <div class="col-md-6 sc-p-b-md">
           <div class="sc-label">Etapa </div>
           <div class="sc-input-group">
-            <select ng-model="formPrototipo.params.etapa" ng-class="{'error':formPrototipo.errors.etapa}" class="sc-input-default" style="width:100%">
+            <select ng-model="formPrototipo.params.etapa.value" ng-class="{'error':formPrototipo.errors.etapa}" class="sc-input-default" style="width:100%">
               <option style="display: none"></option>
               <option ng-repeat="i in etapas" value="{{i.value}}">{{i.label}}</option>
             </select>
-            <button class="sc-btn sc-btn-blue">
-              <i class="sc-icon sc-icon-mais-1" ng-click="typesConfigs.init('etapa')"></i>
+            <button class="sc-btn sc-btn-blue" ng-click="typesConfigs.init('etapa')">
+              <i class="sc-icon sc-icon-mais-1"></i>
             </button>
           </div>
         </div>
         <div class="col-md-6 sc-p-b-md">
           <div class="sc-label">Status</div>
           <div class="sc-input-group">
-            <select ng-model="formPrototipo.params.status" ng-class="{'error':formPrototipo.errors.status}" class="sc-input-default" style="width:100%">
+            <select ng-model="formPrototipo.params.status.value" ng-class="{'error':formPrototipo.errors.status}" class="sc-input-default" style="width:100%">
               <option style="display: none"></option>
               <option ng-repeat="i in status" value="{{i.value}}">{{i.label}}</option>
             </select>
-            <button class="sc-btn sc-btn-blue">
-              <i class="sc-icon sc-icon-mais-1" ng-click="typesConfigs.init('status')"></i>
+            <button class="sc-btn sc-btn-blue" ng-click="typesConfigs.init('status')">
+              <i class="sc-icon sc-icon-mais-1"></i>
             </button>
           </div>
         </div>

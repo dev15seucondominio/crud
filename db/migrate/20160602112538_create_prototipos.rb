@@ -1,3 +1,4 @@
+#
 class CreatePrototipos < ActiveRecord::Migration
   def change
     create_table :prototipos, force: :cascade do |t|

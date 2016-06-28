@@ -2,14 +2,12 @@ angular.module 'PrototypeSc'
 
  .factory 'Comentarios', [
   '$resource'
-  'scAlert'
-  'scTopMessages'
-  ($resource, scAlert, scTopMessages)->
+  ($resource)->
 
     encapsulateData = (data) ->
       return JSON.stringify { 'comentarios': data }
 
-    $resource '/comentarios/:id.json',
+    $resource '/prototipos/id/comentarios/:id.json',
       { id: '@id' },
         create:
           method: 'POST'

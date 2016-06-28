@@ -1,6 +1,6 @@
 #
 class AddPrototipoIdInComentarios < ActiveRecord::Migration
   def change
-    add_column :comentarios, :prototipo_id, :integer, null: false
+    add_column :comentarios, :prototipo_id, :integer
   end
 end

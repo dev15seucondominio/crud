@@ -11,29 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617140719) do
-
-  create_table "asdf", id: false, force: :cascade do |t|
-    t.text "a"
-  end
+ActiveRecord::Schema.define(version: 20160628101053) do
 
   create_table "comentarios", force: :cascade do |t|
-    t.integer  "prototipo_id", null: false
     t.string   "nome",         null: false
     t.text     "mensagem",     null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "prototipo_id"
   end
 
   create_table "config_prototipos", force: :cascade do |t|
     t.string   "type",       null: false
     t.string   "label",      null: false
     t.string   "value",      null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "formularios", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -47,10 +38,10 @@ ActiveRecord::Schema.define(version: 20160617140719) do
 
   create_table "prototipos", force: :cascade do |t|
     t.text     "nome",          null: false
-    t.string   "tarefas",       null: false
+    t.string   "tarefas"
     t.string   "categoria",     null: false
     t.text     "mockup"
-    t.text     "link",          null: false
+    t.text     "link"
     t.string   "etapa",         null: false
     t.string   "status",        null: false
     t.string   "analista",      null: false

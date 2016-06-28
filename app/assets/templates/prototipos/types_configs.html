@@ -23,7 +23,7 @@
           <div class="pull-right sc-m-r-xxl">
             <label>
               <i class="sc-badge-hover-yellow sc-icon sc-icon-lapis" ng-click="typesConfigs.editar(item)"></i>
-              <i class="sc-icon sc-badge-hover-red sc-icon-lixeira-1" ng-click="typesConfigs.delete(item)"></i>
+              <i class="sc-icon sc-badge-hover-red sc-icon-lixeira-1" ng-click="typesConfigs.deletarAlert(item)"></i>
             </label>
           </div>
         </div>
@@ -40,6 +40,12 @@
           Não possui nenhum(a) {{typesConfigs.type}}!
         </div>
       </li>
+      <!-- <li ng-show="typesConfigs.errors">
+        <div class="sc-p-v-md align-center sc-text-gray">
+          <i class="sc-icon sc-icon-exclamacao-3"></i>
+          Não possui nenhum(a) {{typesConfigs.errors}}!
+        </div>
+      </li> -->
     </ul>
   </div>
 </div>

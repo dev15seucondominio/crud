@@ -126,3 +126,27 @@
       label: label, value: label.fileize
     )
   end
+
+# Prototipo
+  Prototipo.destroy_all
+
+  prototipos = []
+  STATUS.each do |status|
+    prototipos << Prototipo.new(
+      nome: Faker::Name.name,
+      categoria: CATEGORIAS.sample(1 + rand(CATEGORIAS.length)).first,
+      status: status,
+      etapa: ETAPAS.sample(1 + rand(ETAPAS.length)).first,
+      relevancia: Faker::Number.between(0, 10),
+      analista: ::Pessoa.where(tipo: TIPO[:analista]).first,
+      comentarios_attributes: [
+        nome: Faker::Name.name, mensagem: Faker::Lorem.paragraph(2)
+      ]
+    )
+  end
+
+  prototipos.each do |prototipo|
+    next if prototipo.save
+
+    raise "#{prototipo.errors.full_messages}"
+  end
