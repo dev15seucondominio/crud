@@ -1,8 +1,8 @@
 angular.module 'PrototypeSc'
 
 .controller 'Prototype::IndexCtrl', [
-  '$scope', 'Prototipos', '$scModal', 'scAlert', '$timeout', 'scToggle','scTopMessages', '$routeParams', 'PrototiposConfigs'
-  (sc, Prototipos, $scModal, scAlert, $timeout, toggle, scTopMessages, routeParams, PrototiposConfigs)->
+  '$scope', 'Prototipo', '$scModal', 'scAlert', '$timeout', 'scToggle','scTopMessages', '$routeParams', 'PrototipoConfig'
+  (sc, Prototipo, $scModal, scAlert, $timeout, toggle, scTopMessages, routeParams, PrototipoConfig)->
     sc.prototipos = []
 
     sc.with_settings = true
@@ -67,7 +67,7 @@ angular.module 'PrototypeSc'
             @list = sc.status
       salvar: ()->
         params = angular.extend { type: @type }, @params
-        PrototiposConfigs.create params,
+        PrototipoConfig.create params,
           (data)->
             sc.handleList sc.typesConfigs.list, data
             sc.typesConfigs.limpar()
@@ -75,14 +75,14 @@ angular.module 'PrototypeSc'
             console.log resp
             return
       delete: (obj)->
-        PrototiposConfigs.destroy obj,
+        PrototipoConfig.destroy obj,
           (data)->
             index = sc.typesConfigs.list.indexOf obj
             sc.typesConfigs.list.splice index, 1
           (resp)->
             console.log resp.data
       update: ()->
-        PrototiposConfigs.update @params,
+        PrototipoConfig.update @params,
           (data)->
             sc.handleList sc.typesConfigs.list, data
           (resp)->
@@ -105,7 +105,7 @@ angular.module 'PrototypeSc'
         sc.carregando = true
         params = angular.extend opt, @params
         @change_avancada()
-        Prototipos.list params,
+        Prototipo.list params,
           (data)->
             if sc.with_settings
               sc.categorias = data.categorias
@@ -142,6 +142,12 @@ angular.module 'PrototypeSc'
       modal: new $scModal()
       params: {}
       init_form: (opt = {})->
+        params = [{}]
+        @params = angular.extend opt, params
+        # @params = angular.copy opt, params
+        @errors = null
+        @modal.open()
+      init_formulario: (opt = {})->
         params =
           tarefas: [{value: ''}]
         @params = angular.extend opt, params
@@ -169,7 +175,7 @@ angular.module 'PrototypeSc'
             }
           ]
       deletar: (prototipo)->
-        Prototipos.destroy prototipo,
+        Prototipo.destroy prototipo,
           (data)->
             index = sc.prototipos.indexOf prototipo
             sc.prototipos.splice index, 1
@@ -178,7 +184,7 @@ angular.module 'PrototypeSc'
             scTopMessages.openDanger "Erro ao deletar, porfavor recarregue a página!", {timeOut: 3000}
             console.log resp.data
       criar: ()->
-        Prototipos.create @params,
+        Prototipo.create @params,
           (data)->
             sc.handleList sc.prototipos, data
             sc.formPrototipo.fechar()
@@ -186,7 +192,7 @@ angular.module 'PrototypeSc'
             sc.formPrototipo.errors = resp.data.errors
             console.log resp.data
       update: ()->
-        Prototipos.update @params,
+        Prototipo.update @params,
           (data)->
             sc.handleList sc.prototipos, data
             sc.formPrototipo.fechar()

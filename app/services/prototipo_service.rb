@@ -24,8 +24,6 @@ class PrototipoService
     prototipo = Prototipo.new(attrs)
     return [:errors, prototipo] unless prototipo.save
 
-    comentarios = params[:comentarios]
-
     [:success, prototipo.slim_obj]
   end
 
@@ -46,8 +44,6 @@ class PrototipoService
     prototipo.assign_attributes(attrs.except(:comentarios))
 
     return [:errors, prototipo] unless prototipo.save
-
-    comentarios = params[:comentarios]
 
     [:success, prototipo.to_frontend_obj]
   end

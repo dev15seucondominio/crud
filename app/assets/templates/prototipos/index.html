@@ -7,8 +7,7 @@
           <div style="justify-content: space-between;" class="flex flex-center">
             <div class="flex flex-center">
               <div class="sc-p-l-lg sc-p-l-none">
-                <button ng-click="formPrototipo.init_form()"
-                class="sc-btn sc-btn-blue sc-btn-awesomeness">
+                <button ng-click="formPrototipo.init_formulario()" class="sc-btn sc-btn-blue sc-btn-awesomeness">
                   <div class="sc-btn-icon"><i class="sc-icon sc-icon-mais-1"></i></div>
                   <div class="sc-btn-text">Adicionar</div>
                 </button>
@@ -105,19 +104,19 @@
 
     <section id="corpo" >
       <section>
-        <ul  class="sc-accordion" style="font-size: 0.9em">
+        <ul  class="sc-accordion sc-accordion-prototipos ng-isolate-scope" style="font-size: 0.9em">
           <li style="border-bottom: 1px solid rgb(218, 218, 218);">
             <div class="sc-accordion-head sc-acc-flex sc-text-blue">
-              <div class="col-md-1 align-center">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-0 align-center">
                 <input ng-model="selections.allSelected" ng-click="selections.toggleSelectAll()" type="checkbox" class="sc-checkbox sc-checkbox-blue">
               </div>
-              <div class="col-md-2">Status</div>
-              <div class="col-md-2">Tarefas</div>
-              <div class="col-md-3">Etapa</div>
-              <div class="col-md-2">Relevância</div>
-              <div class="col-md-3">Categoria</div>
-              <div class="col-md-2 hidden-sm">Analista</div>
-              <div class="col-md-1"></div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-1">Status</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-2">Tarefas</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-3">Etapa</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-4">Relevância</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-5">Categoria</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-6 hidden-sm">Analista</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-11"></div>
             </div>
             </hr>
           </li>
@@ -125,31 +124,31 @@
           <li ng-show="prototipos.any() && !carregando" ng-class="{ 'sc-acc-blue-dark':prototipo.acc.opened }" ng-init="initForm(prototipo)"
               ng-controller="Item::Ctrl" ng-repeat="prototipo in prototipos | orderBy: '-id'" style="border-bottom: 1px solid rgb(218, 218, 218);">
             <div class="sc-accordion-head sc-acc-flex sc-text-gray-sm" ng-click="toggleAcc(prototipo)">
-              <div class="col-md-1 align-center">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-0 align-center">
                 <input ng-model="selections.allSelected" type="checkbox" class="sc-checkbox sc-checkbox-blue">
               </div>
-              <div class="col-md-2">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-1">
                 <span class="sc-text-sm sc-border-radius sc-p-h-md sc-p-v-sm sc-text-white" ng-class="{'sc-bg-blue': prototipo.status.label == 'Aguardando',
                             'sc-bg-yellow': prototipo.status.label == 'Em Execução', 'sc-bg-green': prototipo.status.label == 'Concluído'}">
                   {{prototipo.status.label}}
                 </span>
               </div>
-              <div class="col-md-2" ng-repeat="item in prototipo.tarefas | limitTo: 1">
-                <span>{{item.value}}</span>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-2" ng-repeat="item in prototipo.tarefas | limitTo: 1">
+                <span>{{item.value}}</span> <span ng-if="prototipo.tarefas.length > 1">....</span>
               </div>
-              <div class="col-md-3">{{prototipo.etapa.label}}</div>
-              <div class="col-md-2">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-3">{{prototipo.etapa.label}}</div>
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-4">
                 <div class="sc-m-l-xxxl">
                   {{prototipo.relevancia}}
                 </div>
               </div>
-              <div class="col-md-3">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-5">
                 {{prototipo.categoria.label}}
               </div>
-              <div class="col-md-2 hidden-sm">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-6 hidden-sm">
                 {{prototipo.analista}}
               </div>
-              <div class="col-md-1">
+              <div style="width: 100%; font-size: 15px; margin-left: 20px" class="col-11">
                 <div class="pull-right sc-m-r-xxl">
                   <label >
                     <span sc-dropdown-menu sc-stop-click="sc-stop-click" class="sc-dropdown pull-right">

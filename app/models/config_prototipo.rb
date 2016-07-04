@@ -32,4 +32,5 @@ class ConfigPrototipo < ActiveRecord::Base
     # bug rails 4.1 que nulifica os types quando setados em params
     super - [inheritance_column]
   end
+  private_class_method :attributes_protected_by_default
 end

@@ -1,6 +1,6 @@
 angular.module 'PrototypeSc'
 
- .factory 'Prototipos', [
+ .factory 'Prototipo', [
   '$resource'
   ($resource)->
 

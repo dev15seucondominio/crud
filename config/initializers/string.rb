@@ -8,6 +8,10 @@ class String
     gsub(/[^a-zA-Z ]/, '')
   end
 
+  def letras_numeros
+    gsub(/[^A-Za-z0-9 ]/, '')
+  end
+
   def sem_numeros
     gsub(/[*0-9]/, '')
   end
@@ -23,6 +27,6 @@ class String
   end
 
   def fileize
-    remover_acentos.somente_letras.squish.underscore.gsub(" ", "_")
+    remover_acentos.letras_numeros.squish.underscore.gsub(" ", "_")
   end
 end

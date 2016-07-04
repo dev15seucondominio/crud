@@ -66,10 +66,8 @@ class PrototiposController < ApplicationController
   def prototipo_params(params)
     params[:prototipos].present?
     params.require(:prototipos).permit(
-      :id, :nome, :relevancia, :analista, :mockup, :desenvolvedor,
-      :link,
+      :id, :nome, :relevancia, :analista, :mockup, :desenvolvedor, :link,
       status: :value, etapa: :value, categoria: :value, tarefas: :value
     )
-    # raise params[:comentarios_attributes]
   end
 end

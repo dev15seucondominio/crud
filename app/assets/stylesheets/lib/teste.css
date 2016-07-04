@@ -1,0 +1,398 @@
+/*.filtro-nosso-numero:before{content:'@';position:absolute;top:1.1em;left:0.7em;font-size:1.5em;color:#337ab7}.filtro-nosso-numero input{padding-left:2em !important}.filtro-codigo:before{content:'#';position:absolute;top:1.15em;left:0.7em;font-size:1.5em;color:#337ab7}.filtro-codigo input{padding-left:1.7em !important}.boleto-errors>:nth-child(2){border-radius:0 0 .3em .3em;margin-top:-1em}.sc-dropdown-cobranca .sc-dropdown-menu>li>div:hover{background:#a7cae8}.sc-cards{max-width:57em;margin:0 auto;padding:0 1.5em}.sc-cards .sc-card{margin:0 -1px -1px 0;padding:1em;text-align:center;background-color:#ECECEE;border:1px solid #DCDCDE}@media (min-width: 480px){.sc-card-plus:before{content:"+"}.sc-card-equal:before{content:"="}.sc-card-plus,.sc-card-equal{position:relative}.sc-card-plus:before,.sc-card-equal:before{z-index:10;position:absolute;display:block;top:calc(50% - .5em);right:-.5em;width:1em;height:1em;line-height:1em;font-size:1.5em;text-align:center;font-weight:bold;background:#AFB4B8;color:#fff;border-radius:1em}}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;padding:0;font-size:.9em}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>*{-webkit-box-flex:1;-webkit-flex:1 0 5em;-ms-flex:1 0 5em;flex:1 0 5em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>* .nowrap{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11{-webkit-box-flex:0;-webkit-flex:0 0 3em;-ms-flex:0 0 3em;flex:0 0 3em;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1{-webkit-box-flex:0;-webkit-flex:0 0 8%;-ms-flex:0 0 8%;flex:0 0 8%;max-width:8%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2{-webkit-box-flex:0;-webkit-flex:0 0 8%;-ms-flex:0 0 8%;flex:0 0 8%;max-width:8%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3{-webkit-box-flex:0;-webkit-flex:0 0 10%;-ms-flex:0 0 10%;flex:0 0 10%;max-width:10%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4{-webkit-box-flex:0;-webkit-flex:0 0 10%;-ms-flex:0 0 10%;flex:0 0 10%;max-width:10%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5{-webkit-box-flex:0;-webkit-flex:0 0 10%;-ms-flex:0 0 10%;flex:0 0 10%;max-width:10%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6{-webkit-box-flex:0;-webkit-flex:0 0 12%;-ms-flex:0 0 12%;flex:0 0 12%;max-width:12%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7{-webkit-box-flex:1;-webkit-flex:1 0 calc(26% - 9em);-ms-flex:1 0 calc(26% - 9em);flex:1 0 calc(26% - 9em);max-width:calc(26% - 9em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8{-webkit-box-flex:0;-webkit-flex:0 0 8%;-ms-flex:0 0 8%;flex:0 0 8%;max-width:8%}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9{-webkit-box-flex:0;-webkit-flex:0 0 8%;-ms-flex:0 0 8%;flex:0 0 8%;max-width:8%}@media (min-width: 480px) and (max-width: 959px){.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>*{padding:0.6em 0.2em}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11{-webkit-box-flex:0;-webkit-flex:0 0 2.5em;-ms-flex:0 0 2.5em;flex:0 0 2.5em;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1{-webkit-box-flex:0;-webkit-flex:0 0 calc(20% - 1.5em);-ms-flex:0 0 calc(20% - 1.5em);flex:0 0 calc(20% - 1.5em);max-width:calc(20% - 1.5em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2{-webkit-box-flex:0;-webkit-flex:0 0 calc(20% - 1.5em);-ms-flex:0 0 calc(20% - 1.5em);flex:0 0 calc(20% - 1.5em);max-width:calc(20% - 1.5em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3{-webkit-box-flex:1;-webkit-flex:1 0 calc(20% - 1.5em);-ms-flex:1 0 calc(20% - 1.5em);flex:1 0 calc(20% - 1.5em);max-width:calc(20% - 1.5em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4{-webkit-box-flex:1;-webkit-flex:1 0 calc(20% - 1.5em);-ms-flex:1 0 calc(20% - 1.5em);flex:1 0 calc(20% - 1.5em);max-width:calc(20% - 1.5em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5{display:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6{display:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7{display:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8{-webkit-box-flex:1;-webkit-flex:1 0 calc(20% - 1.5em);-ms-flex:1 0 calc(20% - 1.5em);flex:1 0 calc(20% - 1.5em);max-width:calc(20% - 1.5em)}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9{display:none}}@media (max-width: 479px){.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex{-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;height:3.5em}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>*{padding:0 0.2em;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11{-webkit-box-flex:0;-webkit-flex:0 0 100%;-ms-flex:0 0 100%;flex:0 0 100%;max-height:100%;width:2.5em}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8{-webkit-box-flex:0;-webkit-flex:0 0 50%;-ms-flex:0 0 50%;flex:0 0 50%;max-height:50%;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;justify-content:flex-end;width:8em;max-width:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7{-webkit-box-flex:0;-webkit-flex:0 0 50%;-ms-flex:0 0 50%;flex:0 0 50%;max-height:50%;width:calc(100% - 13em);max-width:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7{-webkit-box-align:start;-webkit-align-items:flex-start;-ms-flex-align:start;align-items:flex-start}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4 span,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 span{font-size:.9em}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8{font-weight:bold;-webkit-box-align:end;-webkit-align-items:flex-end;-ms-flex-align:end;align-items:flex-end}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9,.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10{display:none}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0{-webkit-box-ordinal-group:1;-webkit-order:0;-ms-flex-order:0;order:0}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5{-webkit-box-ordinal-group:2;-webkit-order:1;-ms-flex-order:1;order:1}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7{-webkit-box-ordinal-group:3;-webkit-order:2;-ms-flex-order:2;order:2}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8{-webkit-box-ordinal-group:4;-webkit-order:3;-ms-flex-order:3;order:3}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4{-webkit-box-ordinal-group:5;-webkit-order:4;-ms-flex-order:4;order:4}.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11{-webkit-box-ordinal-group:6;-webkit-order:5;-ms-flex-order:5;order:5}}
+*/
+
+
+
+
+
+
+.filtro-nosso-numero:before {
+    content: '@';
+    position: absolute;
+    top: 1.1em;
+    left: 0.7em;
+    font-size: 1.5em;
+    color: #337ab7
+}
+
+.filtro-nosso-numero input {
+    padding-left: 2em !important
+}
+
+.filtro-codigo:before {
+    content: '#';
+    position: absolute;
+    top: 1.15em;
+    left: 0.7em;
+    font-size: 1.5em;
+    color: #337ab7
+}
+
+.filtro-codigo input {
+    padding-left: 1.7em !important
+}
+
+.boleto-errors>:nth-child(2) {
+    border-radius: 0 0 .3em .3em;
+    margin-top: -1em
+}
+
+.sc-dropdown-cobranca .sc-dropdown-menu>li>div:hover {
+    background: #a7cae8
+}
+
+.sc-cards {
+    max-width: 57em;
+    margin: 0 auto;
+    padding: 0 1.5em
+}
+
+.sc-cards .sc-card {
+    margin: 0 -1px -1px 0;
+    padding: 1em;
+    text-align: center;
+    background-color: #ECECEE;
+    border: 1px solid #DCDCDE
+}
+
+@media (min-width: 480px) {
+    .sc-card-plus:before {
+        content: "+"
+    }
+    .sc-card-equal:before {
+        content: "="
+    }
+    .sc-card-plus,
+    .sc-card-equal {
+        position: relative
+    }
+    .sc-card-plus:before,
+    .sc-card-equal:before {
+        z-index: 10;
+        position: absolute;
+        display: block;
+        top: calc(50% - .5em);
+        right: -.5em;
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        font-size: 1.5em;
+        text-align: center;
+        font-weight: bold;
+        background: #AFB4B8;
+        color: #fff;
+        border-radius: 1em
+    }
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding: 0;
+    font-size: .9em
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>* {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 5em;
+    -ms-flex: 1 0 5em;
+    flex: 1 0 5em;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>* .nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10,
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 3em;
+    -ms-flex: 0 0 3em;
+    flex: 0 0 3em;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 calc(23% - 9em);
+    -ms-flex: 1 0 calc(23% - 9em);
+    flex: 1 0 calc(23% - 9em);
+    max-width: calc(23% - 9em)
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 8%;
+    -ms-flex: 0 0 8%;
+    flex: 0 0 8%;
+    max-width: 8%
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 calc(26% - 9em);
+    -ms-flex: 1 0 calc(26% - 9em);
+    flex: 1 0 calc(26% - 9em);
+    max-width: calc(26% - 9em)
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 12%;
+    -ms-flex: 0 0 12%;
+    flex: 0 0 12%;
+    max-width: 12%
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 calc(26% - 9em);
+    -ms-flex: 1 0 calc(26% - 9em);
+    flex: 1 0 calc(26% - 9em);
+    max-width: calc(26% - 9em)
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 calc(26% - 9em);
+    -ms-flex: 1 0 calc(26% - 9em);
+    flex: 1 0 calc(26% - 9em);
+    max-width: calc(26% - 9em)
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 calc(26% - 9em);
+    -ms-flex: 1 0 calc(26% - 9em);
+    flex: 1 0 calc(26% - 9em);
+    max-width: calc(26% - 9em)
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 8%;
+    -ms-flex: 0 0 8%;
+    flex: 0 0 8%;
+    max-width: 8%
+}
+
+.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 8%;
+    -ms-flex: 0 0 8%;
+    flex: 0 0 8%;
+    max-width: 8%
+}
+
+@media (min-width: 480px) and (max-width: 959px) {
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>* {
+        padding: 0.6em 0.2em
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 2.5em;
+        -ms-flex: 0 0 2.5em;
+        flex: 0 0 2.5em;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 calc(20% - 1.5em);
+        -ms-flex: 0 0 calc(20% - 1.5em);
+        flex: 0 0 calc(20% - 1.5em);
+        max-width: calc(20% - 1.5em)
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 calc(20% - 1.5em);
+        -ms-flex: 0 0 calc(20% - 1.5em);
+        flex: 0 0 calc(20% - 1.5em);
+        max-width: calc(20% - 1.5em)
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3 {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 0 calc(20% - 1.5em);
+        -ms-flex: 1 0 calc(20% - 1.5em);
+        flex: 1 0 calc(20% - 1.5em);
+        max-width: calc(20% - 1.5em)
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4 {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 0 calc(20% - 1.5em);
+        -ms-flex: 1 0 calc(20% - 1.5em);
+        flex: 1 0 calc(20% - 1.5em);
+        max-width: calc(20% - 1.5em)
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5 {
+        display: none
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6 {
+        display: none
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 {
+        display: none
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8 {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 0 calc(20% - 1.5em);
+        -ms-flex: 1 0 calc(20% - 1.5em);
+        flex: 1 0 calc(20% - 1.5em);
+        max-width: calc(20% - 1.5em)
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9 {
+        display: none
+    }
+}
+
+@media (max-width: 479px) {
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        height: 3.5em
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex>* {
+        padding: 0 0.2em;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center
+    }
+    /*.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 100%;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-height: 100%;
+        width: 2.5em
+    }*/
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 50%;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-height: 50%;
+        -webkit-box-pack: end;
+        -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        width: 8em;
+        max-width: none
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-5,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 50%;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-height: 50%;
+        width: calc(100% - 13em);
+        max-width: none
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 {
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3 span,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-7 span {
+        font-size: .9em
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 100%;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-height: 100%;
+        width: 2.5em
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3 {
+        font-weight: bold;
+        -webkit-box-align: end;
+        -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+        align-items: flex-end
+    }
+    /*.sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-3,*/
+   /* .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-6,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-9,
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-10 {
+        display: none
+    }*/
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-0 {
+        -webkit-box-ordinal-group: 1;
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-1 {
+        -webkit-box-ordinal-group: 2;
+        -webkit-order: 1;
+        -ms-flex-order: 1;
+        order: 1
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-2 {
+        -webkit-box-ordinal-group: 2;
+        -webkit-order: 1;
+        -ms-flex-order: 1;
+        order: 1
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-8 {
+        -webkit-box-ordinal-group: 4;
+        -webkit-order: 3;
+        -ms-flex-order: 3;
+        order: 3
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-4 {
+        -webkit-box-ordinal-group: 5;
+        -webkit-order: 4;
+        -ms-flex-order: 4;
+        order: 4
+    }
+    .sc-accordion-prototipos .sc-accordion-head.sc-acc-flex .col-11 {
+        -webkit-box-ordinal-group: 6;
+        -webkit-order: 5;
+        -ms-flex-order: 5;
+        order: 5
+    }
+}

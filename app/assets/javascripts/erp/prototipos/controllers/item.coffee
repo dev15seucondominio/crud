@@ -1,8 +1,8 @@
 angular.module 'PrototypeSc'
 
   .controller 'Item::Ctrl', [
-    '$scope', 'Prototipos', '$filter', '$timeout', 'scAlert', 'scTopMessages', 'scToggle', 'Comentarios'
-    (sc, Prototipos, $filter, $timeout, scAlert, scTopMessages, toggle, Comentarios)->
+    '$scope', 'Prototipo', '$filter', '$timeout', 'scAlert', 'scTopMessages', 'scToggle', 'Comentario'
+    (sc, Prototipo, $filter, $timeout, scAlert, scTopMessages, toggle, Comentario)->
 
       sc.initForm = (prototipo)->
         sc.prototipo = prototipo
@@ -12,7 +12,7 @@ angular.module 'PrototypeSc'
 
       sc.objComentario =
         deletarComentario: (comentario)->
-          Comentarios.destroy comentario,
+          Comentario.destroy comentario,
             (data)->
               index = sc.prototipo.comentarios.indexOf comentario
               sc.prototipo.comentarios.splice index, 1
@@ -24,7 +24,7 @@ angular.module 'PrototypeSc'
             sc.comentarioError = false
             sc.error = false
             comentario.prototipo_id = sc.prototipo.id
-            Comentarios.create comentario,
+            Comentario.create comentario,
               (data)->
                 comentario.nome = ''
                 comentario.mensagem = ''
@@ -39,7 +39,7 @@ angular.module 'PrototypeSc'
       sc.load_prototipo = ()->
         return if sc.prototipo.carregando || sc.prototipo.carregado
         sc.prototipo.carregando = true
-        Prototipos.show {id: sc.prototipo.id},
+        Prototipo.show {id: sc.prototipo.id},
           (data)->
             sc.prototipo = angular.extend sc.prototipo, data
             sc.prototipo.carregado = true
@@ -49,7 +49,7 @@ angular.module 'PrototypeSc'
             sc.prototipo.carregando = false
 
       sc.toggleAcc = (obj)->
-        f.acc.close() for f in sc.prototipos unless obj.acc.opened
+        f.acc.close() for f in sc.prototipo unless obj.acc.opened
         obj.acc.toggle()
 
   ]

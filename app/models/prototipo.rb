@@ -1,6 +1,7 @@
 #
 class Prototipo < ActiveRecord::Base
-  before_validation :garantir_link
+  before_validation :garantir_link, :garantir_etapa, :garantir_categoria,
+                    :garantir_status
 
   validates :nome, :categoria, :etapa, :status, :analista, presence:
             { message: 'Não pode ser vazio.' }
@@ -121,6 +122,21 @@ class Prototipo < ActiveRecord::Base
   end
 
   private
+
+  def garantir_etapa
+    return if etapa?
+    errors.add(:error, 'Etapa não está presente')
+  end
+
+  def garantir_categoria
+    return if categoria?
+    errors.add(:error, 'Categoria não está presente')
+  end
+
+  def garantir_status
+    return if status?
+    errors.add(:error, 'Status não está presente')
+  end
 
   # # ira ser permitido a entra normal somente dos link de codepen.io,
   # # sem dominio ou herokuapp.com

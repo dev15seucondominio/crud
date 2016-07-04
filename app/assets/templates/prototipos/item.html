@@ -5,6 +5,10 @@
       <span class="sc-text-blue sc-p-l-md">{{prototipo.nome}}</span>
     </div>
     <div class="col-md-12 sc-p-b-md">
+      <span class="sc-text-gray">Tarefas:</spam>
+      <span class="sc-text-blue sc-p-l-md" ng-repeat="tarefa in prototipo.tarefas">{{tarefa.value}} <span ng-if="!$last">,</span></span>
+    </div>
+    <div class="col-md-12 sc-p-b-md">
       <span class="sc-text-gray">Categoria:</spam>
       <span class="sc-text-blue sc-p-l-md">{{prototipo.categoria.label}}</span>
     </div>

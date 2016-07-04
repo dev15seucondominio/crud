@@ -138,7 +138,8 @@
       status: status,
       etapa: ETAPAS.sample(1 + rand(ETAPAS.length)).first,
       relevancia: Faker::Number.between(0, 10),
-      analista: ::Pessoa.where(tipo: TIPO[:analista]).first,
+      tarefas: [''],
+      analista: Pessoa.where(tipo: TIPO[:analista]).first.nome,
       comentarios_attributes: [
         nome: Faker::Name.name, mensagem: Faker::Lorem.paragraph(2)
       ]

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
        controller: 'configs_prototipos', action: 'create'
   delete 'prototipos/id/configs_prototipos/:id',
          controller: 'configs_prototipos', action: 'destroy'
-  put 'prototipos/id/configs_prototipos',
+  put 'prototipos/id/configs_prototipos/:id',
       controller: 'configs_prototipos', action: 'update'
   # resources :comentarios, only: [:create, :destroy]
   # resources :configs_prototipos, only: [:create, :destroy, :update]
